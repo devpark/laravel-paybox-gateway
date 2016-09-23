@@ -7,6 +7,26 @@ return [
     'test' => env('PAYBOX_TEST', false),
 
     /*
+     * Site number (provided by Paybox)
+     */
+    'site' => env('PAYBOX_SITE', ''),
+
+    /*
+     * Rank number (provided by Paybox)
+     */
+    'rank' => env('PAYBOX_RANK', ''),
+
+    /*
+     * Internal identifier (provided by Paybox)
+     */
+    'id' => env('PAYBOX_ID', ''),
+
+    /*
+     * HMAC authentication key - it should be generated in Paybox merchant panel
+     */
+    'hmac_key' => storage_path('app/private/hmac_key'),
+
+    /*
      * Access urls for Paybox for production environment
      */
     'production_urls' => [
