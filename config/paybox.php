@@ -27,6 +27,39 @@ return [
     'hmac_key' => storage_path('app/private/hmac_key'),
 
     /*
+     * Default return fields when going back from Paybox. You can change here keys as you want,
+     * you can add also more values from ResponseField class     
+     */
+    'return_fields' => [
+        'amount' => \Devpark\PayboxGateway\ResponseField::AMOUNT,
+        'order_number' => \Devpark\PayboxGateway\ResponseField::ORDER_NUMBER,
+        'response_code' => \Devpark\PayboxGateway\ResponseField::RESPONSE_CODE,
+        'payment_type' => \Devpark\PayboxGateway\ResponseField::PAYMENT_TYPE,
+    ],
+
+    /*
+     * Those are routes names (not urls) where customer will be redirected after payment. If you 
+     * want to use custom route with params in url you should set them dynamically when creating
+     * authorization data. You shouldn't change keys here. Those urls will be later launched using 
+     * GET HTTP request
+     */
+    'customer_return_routes_names' => [
+        'accepted' => 'paybox.accepted',
+        'refused' => 'paybox.refused',
+        'aborted' => 'paybox.aborted',
+        'waiting' => 'paybox.waiting',
+    ],
+
+    /*
+     * This is route name (not url) where Paybox will send transaction status. This url is
+     * independent from customer urls and it's the only url that should be used to track current
+     * payment status for real. If you want to use custom route with params in url you should set it
+     * dynamically when creating authorization data. This url will be later launched using GET HTTP
+     * request
+     */
+    'transaction_verify_route_name' => 'paybox.process',
+
+    /*
      * Access urls for Paybox for production environment
      */
     'production_urls' => [
