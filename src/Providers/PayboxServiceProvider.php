@@ -17,11 +17,16 @@ class PayboxServiceProvider extends ServiceProvider
         // publish configuration file
         $this->publishes([
             $this->configFile() => $this->app['path.config'] . DIRECTORY_SEPARATOR . 'paybox.php',
-        ]);
+        ], 'config');
+
+        $this->publishes([
+            realpath(__DIR__ . '/../../views') => $this->app['path.base'] . DIRECTORY_SEPARATOR
+                . 'resources' . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR . 'paybox',
+        ], 'views');
     }
 
     /**
-     * Get module config file
+     * Get module config file.
      *
      * @return string
      */
