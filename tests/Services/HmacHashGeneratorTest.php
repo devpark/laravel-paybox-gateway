@@ -5,6 +5,7 @@ namespace Tests\Services;
 use Devpark\PayboxGateway\Services\HmacHashGenerator;
 use Illuminate\Config\Repository as Config;
 use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Contracts\Foundation\Application;
 use Tests\UnitTestCase;
 use Mockery as m;
 
@@ -13,10 +14,14 @@ class HmacHashGeneratorTest extends UnitTestCase
     /** @test */
     public function it_gets_valid_hmac_hash_for_multiple_params()
     {
+        $app = m::mock(Application::class)->makePartial();
         $config = m::mock(Config::class);
         $files = m::mock(Filesystem::class);
 
-        $generator = new HmacHashGenerator($config, $files);
+        $app->shouldReceive('make')->with('config')->once()->andReturn($config);
+        $app->shouldReceive('make')->with('files')->once()->andReturn($files);
+
+        $generator = new HmacHashGenerator($app);
 
         $params = [
             'param1' => 'value',

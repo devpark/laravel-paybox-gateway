@@ -3,7 +3,8 @@
 namespace Devpark\PayboxGateway\Services;
 
 use Illuminate\Contracts\Config\Repository as Config;
-use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Filesystem\Filesystem;
 
 class HmacHashGenerator
 {
@@ -20,13 +21,12 @@ class HmacHashGenerator
     /**
      * HmacGenerator constructor.
      *
-     * @param Config $config
-     * @param Filesystem $files
+     * @param Application $app
      */
-    public function __construct(Config $config, Filesystem $files)
+    public function __construct(Application $app)
     {
-        $this->config = $config;
-        $this->files = $files;
+        $this->config = $app->make('config');
+        $this->files = $app->make('files');
     }
 
     /**
