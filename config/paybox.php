@@ -9,7 +9,7 @@ return [
     /*
      * Access urls for Paybox for production environment
      */
-    'production_servers' => [
+    'production_urls' => [
         /*
          * Paybox System urls
          */
@@ -21,8 +21,8 @@ return [
 
     /*
      * Access urls for Paybox for test environment
-     */    
-    'test_servers' => [
+     */
+    'test_urls' => [
         /*
          * Paybox System urls
          */
