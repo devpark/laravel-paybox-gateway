@@ -83,7 +83,7 @@ class ServerSelector
     {
         $prefix = $this->config->get('paybox.test') ? 'test' : 'production';
 
-        return (array) $this->config->get($prefix . '_urls.' . $type);
+        return (array) $this->config->get('paybox.' . $prefix . '_urls.' . $type);
     }
 
     /**
