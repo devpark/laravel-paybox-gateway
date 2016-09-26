@@ -6,8 +6,8 @@
 </head>
 <body>
 <form method="post" action="{{ $url }}" id="paybox-payment">
-    @foreach ($params as $paramName => $paramValue)
-        <input type="hidden" name="{{ $paramName }}" value="{{ $paramValue }}">
+    @foreach ($parameters as $name => $value)
+        <input type="hidden" name="{{ $name }}" value="{{ $value }}">
     @endforeach
 
     <input type="submit" value="Send payment">
