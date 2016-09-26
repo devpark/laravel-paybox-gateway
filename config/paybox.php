@@ -24,7 +24,7 @@ return [
     /*
      * HMAC authentication key - it should be generated in Paybox merchant panel
      */
-    'hmac_key' => storage_path('app/private/hmac_key'),
+    'hmac_key' => env('PAYBOX_HMAC_KEY', ''),
 
     /*
      * Default return fields when going back from Paybox. You can change here keys as you want,

@@ -4,7 +4,6 @@ namespace Devpark\PayboxGateway\Services;
 
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Filesystem\Filesystem;
 
 class HmacHashGenerator
 {
@@ -14,11 +13,6 @@ class HmacHashGenerator
     protected $config;
 
     /**
-     * @var Filesystem
-     */
-    protected $files;
-
-    /**
      * HmacGenerator constructor.
      *
      * @param Application $app
@@ -26,7 +20,6 @@ class HmacHashGenerator
     public function __construct(Application $app)
     {
         $this->config = $app->make('config');
-        $this->files = $app->make('files');
     }
 
     /**
@@ -49,7 +42,7 @@ class HmacHashGenerator
      */
     protected function getKey()
     {
-        return $this->files->get($this->config->get('paybox.hmac_key'));
+        return $this->config->get('paybox.hmac_key');
     }
 
     /**
