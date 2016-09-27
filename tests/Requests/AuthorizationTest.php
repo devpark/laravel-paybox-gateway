@@ -5,41 +5,17 @@ namespace Tests\Requests;
 use Carbon\Carbon;
 use Devpark\PayboxGateway\Currency;
 use Devpark\PayboxGateway\Language;
-use Devpark\PayboxGateway\Requests\AuthorizationWithoutCapture;
-use Devpark\PayboxGateway\Services\HmacHashGenerator;
-use Devpark\PayboxGateway\Services\ServerSelector;
-use Illuminate\Contracts\Routing\UrlGenerator;
-use Illuminate\Contracts\View\Factory as ViewFactory;
-use Illuminate\Contracts\Config\Repository as Config;
+use Tests\Helpers\Authorization as AuthorizationHelper;
 use Tests\UnitTestCase;
-use Mockery as m;
 
 class AuthorizationTest extends UnitTestCase
 {
-    protected $serverSelector;
-    protected $config;
-    protected $hmacHashGenerator;
-    protected $urlGenerator;
-    protected $view;
-    protected $request;
+    use AuthorizationHelper;
 
     public function setUp()
     {
         parent::setUp();
-        $this->serverSelector = m::mock(ServerSelector::class);
-        $this->config = m::mock(Config::class);
-        $this->hmacHashGenerator = m::mock(HmacHashGenerator::class);
-        $this->urlGenerator = m::mock(UrlGenerator::class);
-        $this->view = m::mock(ViewFactory::class);
-        $this->request = m::mock(AuthorizationWithoutCapture::class,
-            [
-                $this->serverSelector,
-                $this->config,
-                $this->hmacHashGenerator,
-                $this->urlGenerator,
-                $this->view,
-            ])->makePartial()
-            ->shouldAllowMockingProtectedMethods();
+        $this->setUpMocks();
     }
 
     /** @test */
@@ -307,13 +283,5 @@ class AuthorizationTest extends UnitTestCase
             ->with($viewName, ['parameters' => $parameters, 'url' => $sampleUrl]);
 
         $this->request->send($viewName);
-    }
-
-    protected function ignoreMissingMethods()
-    {
-        $this->config->shouldIgnoreMissing();
-        $this->urlGenerator->shouldIgnoreMissing();
-        $this->urlGenerator->shouldIgnoreMissing();
-        $this->hmacHashGenerator->shouldIgnoreMissing();
     }
 }

@@ -1,0 +1,47 @@
+<?php
+
+namespace Tests\Helpers;
+
+use Devpark\PayboxGateway\Requests\AuthorizationWithCapture;
+use Devpark\PayboxGateway\Services\HmacHashGenerator;
+use Devpark\PayboxGateway\Services\ServerSelector;
+use Illuminate\Contracts\Routing\UrlGenerator;
+use Illuminate\Contracts\View\Factory as ViewFactory;
+use Illuminate\Contracts\Config\Repository as Config;
+use Mockery as m;
+
+trait Authorization
+{
+    protected $serverSelector;
+    protected $config;
+    protected $hmacHashGenerator;
+    protected $urlGenerator;
+    protected $view;
+    protected $request;    
+    
+    protected function setUpMocks($class = AuthorizationWithCapture::class)
+    {
+        $this->serverSelector = m::mock(ServerSelector::class);
+        $this->config = m::mock(Config::class);
+        $this->hmacHashGenerator = m::mock(HmacHashGenerator::class);
+        $this->urlGenerator = m::mock(UrlGenerator::class);
+        $this->view = m::mock(ViewFactory::class);
+        $this->request = m::mock($class,
+            [
+                $this->serverSelector,
+                $this->config,
+                $this->hmacHashGenerator,
+                $this->urlGenerator,
+                $this->view,
+            ])->makePartial()
+            ->shouldAllowMockingProtectedMethods();        
+    }
+    
+    protected function ignoreMissingMethods()
+    {
+        $this->config->shouldIgnoreMissing();
+        $this->urlGenerator->shouldIgnoreMissing();
+        $this->urlGenerator->shouldIgnoreMissing();
+        $this->hmacHashGenerator->shouldIgnoreMissing();
+    }    
+}
