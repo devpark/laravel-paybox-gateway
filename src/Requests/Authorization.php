@@ -5,6 +5,7 @@ namespace Devpark\PayboxGateway\Requests;
 use Carbon\Carbon;
 use Devpark\PayboxGateway\Currency;
 use Devpark\PayboxGateway\Language;
+use Devpark\PayboxGateway\Services\Amount;
 use Devpark\PayboxGateway\Services\HmacHashGenerator;
 use Devpark\PayboxGateway\Services\ServerSelector;
 use Illuminate\Contracts\Config\Repository as Config;
@@ -121,6 +122,11 @@ abstract class Authorization
     protected $view;
 
     /**
+     * @var Amount
+     */
+    protected $amountService;
+
+    /**
      * Authorization constructor.
      *
      * @param ServerSelector $serverSelector
@@ -128,19 +134,22 @@ abstract class Authorization
      * @param HmacHashGenerator $hmacHashGenerator
      * @param UrlGenerator $urlGenerator
      * @param ViewFactory $view
+     * @param Amount $amountService
      */
     public function __construct(
         ServerSelector $serverSelector,
         Config $config,
         HmacHashGenerator $hmacHashGenerator,
         UrlGenerator $urlGenerator,
-        ViewFactory $view
+        ViewFactory $view,
+        Amount $amountService
     ) {
         $this->serverSelector = $serverSelector;
         $this->config = $config;
         $this->hmacHashGenerator = $hmacHashGenerator;
         $this->urlGenerator = $urlGenerator;
         $this->view = $view;
+        $this->amountService = $amountService;
     }
 
     /**
@@ -194,7 +203,7 @@ abstract class Authorization
      */
     public function setAmount($amount, $currencyCode = Currency::EUR)
     {
-        $this->amount = str_replace(['.', ','], ['', ''], $amount);
+        $this->amount = $this->amountService->get($amount);
         $this->currencyCode = $currencyCode;
 
         return $this;

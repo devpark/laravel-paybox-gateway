@@ -114,12 +114,10 @@ class AuthorizationTest extends UnitTestCase
     public function setAmount_it_gets_valid_amount_and_currency_when_both_given()
     {
         $this->ignoreMissingMethods();
-
+        $this->amountService->shouldReceive('get')->with(100.22)->once()->andReturn('sample');
         $this->request->setAmount(100.22, Currency::CHF);
-
         $parameters = $this->request->getParameters();
-
-        $this->assertSame('10022', $parameters['PBX_TOTAL']);
+        $this->assertSame('sample', $parameters['PBX_TOTAL']);
         $this->assertSame(Currency::CHF, $parameters['PBX_DEVISE']);
     }
 
@@ -127,9 +125,10 @@ class AuthorizationTest extends UnitTestCase
     public function setAmount_it_gets_valid_amount_and_currency_when_no_currency()
     {
         $this->ignoreMissingMethods();
+        $this->amountService->shouldReceive('get')->with('100,4567')->once()->andReturn('sample2');
         $this->request->setAmount('100,4567');
         $parameters = $this->request->getParameters();
-        $this->assertSame('1004567', $parameters['PBX_TOTAL']);
+        $this->assertSame('sample2', $parameters['PBX_TOTAL']);
         $this->assertSame(Currency::EUR, $parameters['PBX_DEVISE']);
     }
 

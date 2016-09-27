@@ -3,6 +3,7 @@
 namespace Tests\Helpers;
 
 use Devpark\PayboxGateway\Requests\AuthorizationWithCapture;
+use Devpark\PayboxGateway\Services\Amount;
 use Devpark\PayboxGateway\Services\HmacHashGenerator;
 use Devpark\PayboxGateway\Services\ServerSelector;
 use Illuminate\Contracts\Routing\UrlGenerator;
@@ -18,6 +19,7 @@ trait Authorization
     protected $urlGenerator;
     protected $view;
     protected $request;
+    protected $amountService;
 
     protected function setUpMocks($class = AuthorizationWithCapture::class)
     {
@@ -26,6 +28,7 @@ trait Authorization
         $this->hmacHashGenerator = m::mock(HmacHashGenerator::class);
         $this->urlGenerator = m::mock(UrlGenerator::class);
         $this->view = m::mock(ViewFactory::class);
+        $this->amountService = m::mock(Amount::class);
         $this->request = m::mock($class,
             [
                 $this->serverSelector,
@@ -33,6 +36,7 @@ trait Authorization
                 $this->hmacHashGenerator,
                 $this->urlGenerator,
                 $this->view,
+                $this->amountService,
             ])->makePartial()
             ->shouldAllowMockingProtectedMethods();
     }
@@ -43,5 +47,6 @@ trait Authorization
         $this->urlGenerator->shouldIgnoreMissing();
         $this->urlGenerator->shouldIgnoreMissing();
         $this->hmacHashGenerator->shouldIgnoreMissing();
+        $this->amountService->shouldIgnoreMissing();
     }
 }
