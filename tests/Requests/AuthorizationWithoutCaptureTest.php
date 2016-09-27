@@ -4,10 +4,9 @@ namespace Tests\Requests;
 
 use Devpark\PayboxGateway\Requests\AuthorizationWithoutCapture;
 use Tests\UnitTestCase;
-use Mockery as m;
 use Tests\Helpers\Authorization as AuthorizationHelper;
 
-class AuthorizationWithoutCaptureTest extends UnitTestCase 
+class AuthorizationWithoutCaptureTest extends UnitTestCase
 {
     use AuthorizationHelper;
 

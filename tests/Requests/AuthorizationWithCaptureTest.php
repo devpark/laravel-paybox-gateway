@@ -3,10 +3,9 @@
 namespace Tests\Requests;
 
 use Tests\UnitTestCase;
-use Mockery as m;
 use Tests\Helpers\Authorization as AuthorizationHelper;
 
-class AuthorizationWithCaptureTest extends UnitTestCase 
+class AuthorizationWithCaptureTest extends UnitTestCase
 {
     use AuthorizationHelper;
 

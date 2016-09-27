@@ -17,8 +17,8 @@ trait Authorization
     protected $hmacHashGenerator;
     protected $urlGenerator;
     protected $view;
-    protected $request;    
-    
+    protected $request;
+
     protected function setUpMocks($class = AuthorizationWithCapture::class)
     {
         $this->serverSelector = m::mock(ServerSelector::class);
@@ -34,14 +34,14 @@ trait Authorization
                 $this->urlGenerator,
                 $this->view,
             ])->makePartial()
-            ->shouldAllowMockingProtectedMethods();        
+            ->shouldAllowMockingProtectedMethods();
     }
-    
+
     protected function ignoreMissingMethods()
     {
         $this->config->shouldIgnoreMissing();
         $this->urlGenerator->shouldIgnoreMissing();
         $this->urlGenerator->shouldIgnoreMissing();
         $this->hmacHashGenerator->shouldIgnoreMissing();
-    }    
+    }
 }
