@@ -32,10 +32,12 @@ return [
      */
     'return_fields' => [
         'amount' => \Devpark\PayboxGateway\ResponseField::AMOUNT,
+        'authorization_number' => \Devpark\PayboxGateway\ResponseField::AUTHORIZATION_NUMBER,
         'order_number' => \Devpark\PayboxGateway\ResponseField::ORDER_NUMBER,
         'response_code' => \Devpark\PayboxGateway\ResponseField::RESPONSE_CODE,
         'payment_type' => \Devpark\PayboxGateway\ResponseField::PAYMENT_TYPE,
         'subscription_card' => \Devpark\PayboxGateway\ResponseField::SUBSCRIPTION_CARD_OR_PAYPAL_AUTHORIZATION,
+        'signature' => \Devpark\PayboxGateway\ResponseField::SIGNATURE,
     ],
 
     /*
