@@ -59,7 +59,7 @@ class VerifyTest extends UnitTestCase
 
         $this->request->shouldReceive('input')->with('amount')->once()
             ->andReturn($expectedAmount);
-        $this->amountService->shouldReceive('get')->with($amount)->once()
+        $this->amountService->shouldReceive('get')->with($amount, false)->once()
             ->andReturn($expectedAmount);
 
         $result = $this->verify->isAccepted($amount);
@@ -108,7 +108,7 @@ class VerifyTest extends UnitTestCase
 
         $this->request->shouldReceive('input')->with('amount')->once()
             ->andReturn($expectedAmount - 1);
-        $this->amountService->shouldReceive('get')->with($amount)->once()
+        $this->amountService->shouldReceive('get')->with($amount, false)->once()
             ->andReturn($expectedAmount);
 
         $result = $this->verify->isAccepted($amount);

@@ -114,7 +114,8 @@ class AuthorizationTest extends UnitTestCase
     public function setAmount_it_gets_valid_amount_and_currency_when_both_given()
     {
         $this->ignoreMissingMethods();
-        $this->amountService->shouldReceive('get')->with(100.22)->once()->andReturn('sample');
+        $this->amountService->shouldReceive('get')->with(100.22, false)->once()
+            ->andReturn('sample');
         $this->request->setAmount(100.22, Currency::CHF);
         $parameters = $this->request->getParameters();
         $this->assertSame('sample', $parameters['PBX_TOTAL']);
@@ -125,7 +126,8 @@ class AuthorizationTest extends UnitTestCase
     public function setAmount_it_gets_valid_amount_and_currency_when_no_currency()
     {
         $this->ignoreMissingMethods();
-        $this->amountService->shouldReceive('get')->with('100,4567')->once()->andReturn('sample2');
+        $this->amountService->shouldReceive('get')->with('100,4567', false)->once()
+            ->andReturn('sample2');
         $this->request->setAmount('100,4567');
         $parameters = $this->request->getParameters();
         $this->assertSame('sample2', $parameters['PBX_TOTAL']);
@@ -265,7 +267,7 @@ class AuthorizationTest extends UnitTestCase
     }
 
     /** @test */
-    public function send_it_generates_view_with_valid_parameters()
+    public function send_it_generates_view_with_valid_parameters_when_no_parameters_given()
     {
         $parameters = [
             'a' => 'b',
@@ -282,5 +284,25 @@ class AuthorizationTest extends UnitTestCase
             ->with($viewName, ['parameters' => $parameters, 'url' => $sampleUrl]);
 
         $this->request->send($viewName);
+    }
+
+    /** @test */
+    public function send_it_generates_view_with_valid_parameters_when_parameters_given()
+    {
+        $parameters = [
+            'a' => 'b',
+            'c' => 'd',
+        ];
+        $sampleUrl = 'https://example.com';
+
+        $viewName = 'sample.view';
+
+        $this->request->shouldNotReceive('getParameters');
+        $this->request->shouldReceive('getUrl')->withNoArgs()->andReturn($sampleUrl);
+
+        $this->view->shouldReceive('make')
+            ->with($viewName, ['parameters' => $parameters, 'url' => $sampleUrl]);
+
+        $this->request->send($viewName, $parameters);
     }
 }

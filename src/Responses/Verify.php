@@ -71,7 +71,7 @@ class Verify
         $this->request->input($this->parameters[ResponseField::RESPONSE_CODE]) ==
         ResponseCode::SUCCESS &&
         $this->request->input($this->parameters[ResponseField::AMOUNT]) ==
-        $this->amountService->get($amount);
+        $this->amountService->get($amount, false);
     }
 
     /**

@@ -3,7 +3,6 @@
 namespace Devpark\PayboxGateway\Requests;
 
 use Carbon\Carbon;
-use Devpark\PayboxGateway\Currency;
 use Devpark\PayboxGateway\Language;
 use Devpark\PayboxGateway\Services\Amount;
 use Devpark\PayboxGateway\Services\HmacHashGenerator;
@@ -13,41 +12,12 @@ use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\Routing\Router;
 use Illuminate\Contracts\Routing\UrlGenerator;
 
-abstract class Authorization
+abstract class Authorization extends Request
 {
     /**
-     * Selected server to send Authorization request.
-     *
-     * @var ServerSelector
-     */
-    protected $url = null;
-
-    /**
-     * Type of gateway.
-     *
-     * @var string
+     * {@inheritdoc}
      */
     protected $type = 'paybox';
-
-    /**
-     * @var ServerSelector
-     */
-    protected $serverSelector;
-
-    /**
-     * @var Config
-     */
-    protected $config;
-
-    /**
-     * @var int|null
-     */
-    protected $amount = null;
-
-    /**
-     * @var string|null
-     */
-    protected $currencyCode = null;
 
     /**
      * Interface language.
@@ -60,16 +30,6 @@ abstract class Authorization
      * @var string|null
      */
     protected $customerEmail = null;
-
-    /**
-     * @var string|null
-     */
-    protected $time = null;
-
-    /**
-     * @var string|null
-     */
-    protected $paymentNumber = null;
 
     /**
      * @var array|null
@@ -122,11 +82,6 @@ abstract class Authorization
     protected $view;
 
     /**
-     * @var Amount
-     */
-    protected $amountService;
-
-    /**
      * Authorization constructor.
      *
      * @param ServerSelector $serverSelector
@@ -144,12 +99,10 @@ abstract class Authorization
         ViewFactory $view,
         Amount $amountService
     ) {
-        $this->serverSelector = $serverSelector;
-        $this->config = $config;
+        parent::__construct($serverSelector, $config, $amountService);
         $this->hmacHashGenerator = $hmacHashGenerator;
         $this->urlGenerator = $urlGenerator;
         $this->view = $view;
-        $this->amountService = $amountService;
     }
 
     /**
@@ -194,22 +147,6 @@ abstract class Authorization
     }
 
     /**
-     * Set amount and currency code.
-     *
-     * @param float $amount
-     * @param string $currencyCode
-     *
-     * @return $this
-     */
-    public function setAmount($amount, $currencyCode = Currency::EUR)
-    {
-        $this->amount = $this->amountService->get($amount);
-        $this->currencyCode = $currencyCode;
-
-        return $this;
-    }
-
-    /**
      * Set interface language.
      *
      * @param string $language
@@ -238,20 +175,6 @@ abstract class Authorization
     }
 
     /**
-     * Set time.
-     *
-     * @param Carbon $date
-     *
-     * @return $this
-     */
-    public function setTime(Carbon $date)
-    {
-        $this->time = $date;
-
-        return $this;
-    }
-
-    /**
      * Get formatted date in format required by Paybox.
      *
      * @param Carbon $date
@@ -261,20 +184,6 @@ abstract class Authorization
     protected function getFormattedDate(Carbon $date)
     {
         return $date->format('c');
-    }
-
-    /**
-     * Set payment number.
-     *
-     * @param string $number
-     *
-     * @return $this
-     */
-    public function setPaymentNumber($number)
-    {
-        $this->paymentNumber = $number;
-
-        return $this;
     }
 
     /**
@@ -401,29 +310,18 @@ abstract class Authorization
     }
 
     /**
-     * Get url for sending request.
-     *
-     * @return ServerSelector|string
-     */
-    public function getUrl()
-    {
-        if ($this->url === null) {
-            $this->url = $this->serverSelector->find($this->type);
-        }
-
-        return $this->url;
-    }
-
-    /**
      * Send request with authorization.
      *
      * @param string $viewName
+     * @param array $parameters
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function send($viewName)
+    public function send($viewName, array $parameters = [])
     {
+        $parameters = $parameters ?: $this->getParameters();
+
         return $this->view->make($viewName,
-            ['parameters' => $this->getParameters(), 'url' => $this->getUrl()]);
+            ['parameters' => $parameters, 'url' => $this->getUrl()]);
     }
 }
