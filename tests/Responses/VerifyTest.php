@@ -31,7 +31,7 @@ class VerifyTest extends UnitTestCase
     }
 
     /** @test */
-    public function isAccepted_it_throws_exception_when_signature_is_invalid()
+    public function isSuccess_it_throws_exception_when_signature_is_invalid()
     {
         $amount = 23.32;
         $parameters = ['a' => 'b', 'c' => 'd', 'e' => 'f'];
@@ -42,11 +42,11 @@ class VerifyTest extends UnitTestCase
             ->andReturn(false);
 
         $this->expectException(InvalidSignature::class);
-        $this->verify->isAccepted($amount);
+        $this->verify->isSuccess($amount);
     }
 
     /** @test */
-    public function isAccepted_it_returns_true_when_all_conditions_are_met()
+    public function isSuccess_it_returns_true_when_all_conditions_are_met()
     {
         $amount = 23.32;
         $expectedAmount = 2332;
@@ -62,12 +62,12 @@ class VerifyTest extends UnitTestCase
         $this->amountService->shouldReceive('get')->with($amount, false)->once()
             ->andReturn($expectedAmount);
 
-        $result = $this->verify->isAccepted($amount);
+        $result = $this->verify->isSuccess($amount);
         $this->assertTrue($result);
     }
 
     /** @test */
-    public function isAccepted_it_returns_false_when_no_authorization_number()
+    public function isSuccess_it_returns_false_when_no_authorization_number()
     {
         $amount = 23.32;
 
@@ -75,12 +75,12 @@ class VerifyTest extends UnitTestCase
         $this->request->shouldReceive('input')->with('authorization_number')->once()
             ->andReturn(null);
 
-        $result = $this->verify->isAccepted($amount);
+        $result = $this->verify->isSuccess($amount);
         $this->assertFalse($result);
     }
 
     /** @test */
-    public function isAccepted_it_returns_false_when_response_code_is_different()
+    public function isSuccess_it_returns_false_when_response_code_is_different()
     {
         $amount = 23.32;
 
@@ -90,12 +90,12 @@ class VerifyTest extends UnitTestCase
         $this->request->shouldReceive('input')->with('response_code')->once()
             ->andReturn(ResponseCode::INVALID_EXPIRATION_DATE);
 
-        $result = $this->verify->isAccepted($amount);
+        $result = $this->verify->isSuccess($amount);
         $this->assertFalse($result);
     }
 
     /** @test */
-    public function isAccepted_it_returns_false_when_invalid_amount_given()
+    public function isSuccess_it_returns_false_when_invalid_amount_given()
     {
         $amount = 23.32;
         $expectedAmount = 2332;
@@ -111,7 +111,7 @@ class VerifyTest extends UnitTestCase
         $this->amountService->shouldReceive('get')->with($amount, false)->once()
             ->andReturn($expectedAmount);
 
-        $result = $this->verify->isAccepted($amount);
+        $result = $this->verify->isSuccess($amount);
         $this->assertFalse($result);
     }
 
@@ -143,7 +143,7 @@ class VerifyTest extends UnitTestCase
         $this->amountService->shouldReceive('get')->with($amount)->once()
             ->andReturn($expectedAmount);
 
-        $result = $this->verify->isAccepted($amount);
+        $result = $this->verify->isSuccess($amount);
         $this->assertTrue($result);
     }
 }

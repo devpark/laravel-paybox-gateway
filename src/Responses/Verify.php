@@ -63,7 +63,7 @@ class Verify
      *
      * @return bool
      */
-    public function isAccepted($amount)
+    public function isSuccess($amount)
     {
         $this->checkSignature();
 
