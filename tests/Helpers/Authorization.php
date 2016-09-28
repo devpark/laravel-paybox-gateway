@@ -45,7 +45,6 @@ trait Authorization
     {
         $this->config->shouldIgnoreMissing();
         $this->urlGenerator->shouldIgnoreMissing();
-        $this->urlGenerator->shouldIgnoreMissing();
         $this->hmacHashGenerator->shouldIgnoreMissing();
         $this->amountService->shouldIgnoreMissing();
     }

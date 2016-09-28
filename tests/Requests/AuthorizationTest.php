@@ -176,10 +176,8 @@ class AuthorizationTest extends UnitTestCase
         $this->ignoreMissingMethods();
         $parameters = $this->request->getParameters();
         $now = Carbon::now();
-        $this->assertTrue(in_array($parameters['PBX_TIME'], [
-            $now->format('c'),
-            $now->subSecond(1)->format('c'),
-        ], true));
+        Carbon::setTestNow($now);
+        $this->assertSame($now->format('c'), $parameters['PBX_TIME']);
     }
 
     /** @test */
