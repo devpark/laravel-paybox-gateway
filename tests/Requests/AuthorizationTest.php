@@ -275,11 +275,12 @@ class AuthorizationTest extends UnitTestCase
 
         $viewName = 'sample.view';
 
-        $this->request->shouldReceive('getParameters')->withNoArgs()->andReturn($parameters);
-        $this->request->shouldReceive('getUrl')->withNoArgs()->andReturn($sampleUrl);
+        $this->request->shouldReceive('getParameters')->withNoArgs()->once()
+            ->andReturn($parameters);
+        $this->request->shouldReceive('getUrl')->withNoArgs()->once()->andReturn($sampleUrl);
 
         $this->view->shouldReceive('make')
-            ->with($viewName, ['parameters' => $parameters, 'url' => $sampleUrl]);
+            ->with($viewName, ['parameters' => $parameters, 'url' => $sampleUrl])->once();
 
         $this->request->send($viewName);
     }
@@ -296,10 +297,10 @@ class AuthorizationTest extends UnitTestCase
         $viewName = 'sample.view';
 
         $this->request->shouldNotReceive('getParameters');
-        $this->request->shouldReceive('getUrl')->withNoArgs()->andReturn($sampleUrl);
+        $this->request->shouldReceive('getUrl')->withNoArgs()->once()->andReturn($sampleUrl);
 
         $this->view->shouldReceive('make')
-            ->with($viewName, ['parameters' => $parameters, 'url' => $sampleUrl]);
+            ->with($viewName, ['parameters' => $parameters, 'url' => $sampleUrl])->once();
 
         $this->request->send($viewName, $parameters);
     }
