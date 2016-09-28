@@ -2,7 +2,8 @@
   "name": "devpark/laravel-paybox-gateway",
   "description": "Laravel Paybox gateway",
   "require": {
-    "laravel/framework": "5.*"
+    "laravel/framework": "5.*",
+    "guzzlehttp/guzzle": "^6.2"
   },
   "autoload": {
     "psr-4": {
