@@ -143,4 +143,58 @@ class ServerSelectorTest extends UnitTestCase
 
         $serverSelector->find('paybox');
     }
+
+    /** @test */
+    public function it_finds_valid_server_from_given_when_same()
+    {
+        $config = m::mock(Config::class);
+        $serverSelector = m::mock(ServerSelector::class, [$config])->makePartial()
+            ->shouldAllowMockingProtectedMethods();
+
+        $payboxUrls = [
+            'https://example.com/paybox-payment-url',
+            'https://example.net/paybox-payment-url-2',
+        ];
+
+        $payboxDirectUrls = [
+            'https://example-direct.com/paybox-payment-url',
+            'https://example-direct.net/paybox-payment-url-2',
+        ];
+
+        $config->shouldReceive('get')->with('paybox.test')->times(2)->andReturn(false);
+        $config->shouldReceive('get')->with('paybox.production_urls.paybox')->once()
+            ->andReturn($payboxUrls);
+        $config->shouldReceive('get')->with('paybox.production_urls.paybox_direct')->once()
+            ->andReturn($payboxDirectUrls);
+
+        $url = $serverSelector->findFrom('paybox', 'paybox_direct', $payboxUrls[0], false);
+        $this->assertSame($payboxDirectUrls[0], $url);
+    }
+
+    /** @test */
+    public function it_finds_valid_server_from_given_when_other()
+    {
+        $config = m::mock(Config::class);
+        $serverSelector = m::mock(ServerSelector::class, [$config])->makePartial()
+            ->shouldAllowMockingProtectedMethods();
+
+        $payboxUrls = [
+            'https://example.com/paybox-payment-url',
+            'https://example.net/paybox-payment-url-2',
+        ];
+
+        $payboxDirectUrls = [
+            'https://example-direct.com/paybox-payment-url',
+            'https://example-direct.net/paybox-payment-url-2',
+        ];
+
+        $config->shouldReceive('get')->with('paybox.test')->times(2)->andReturn(false);
+        $config->shouldReceive('get')->with('paybox.production_urls.paybox')->once()
+            ->andReturn($payboxUrls);
+        $config->shouldReceive('get')->with('paybox.production_urls.paybox_direct')->once()
+            ->andReturn($payboxDirectUrls);
+
+        $url = $serverSelector->findFrom('paybox', 'paybox_direct', $payboxUrls[0], true);
+        $this->assertSame($payboxDirectUrls[1], $url);
+    }
 }

@@ -48,6 +48,30 @@ class ServerSelector
         throw new Exception('No servers set or all servers are down');
     }
 
+    public function findFrom($sourceType, $targetType, $sourceUrl, $other)
+    {
+        $sourceUrls = $this->getUrls($sourceType);
+        $targetUrls = $this->getUrls($targetType);
+
+        $key = array_search($sourceUrl, $sourceUrls);
+        if (! $other) {
+            // if same and same key exists let's return url
+            if (isset($targetUrls[$key])) {
+                return $targetUrls[$key];
+            }
+        } else {
+            // we look for other key
+            $keys = array_values(array_diff(array_keys($targetUrls), [$key]));
+            if ($keys && isset($targetUrls[$keys[0]])) {
+                return $targetUrls[$keys[0]];
+            }
+        }
+
+        // it was impossible to find valid target url, so let's use first target url
+
+        return current($targetUrls);
+    }
+
     /**
      * Get servers (hosts only) from urls.
      *

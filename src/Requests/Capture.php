@@ -95,11 +95,16 @@ class Capture extends Request
     }
 
     /**
-     * @param $url
+     * Set url for capture based on authorization url. If other is set to false, it will find
+     * matching Paybox Direct server, otherwise it will try to find other Paybox Direct url.
+     *
+     * @param string $authorizationUrl
+     * @param bool $other
      */
-    public function setUrlFrom($url)
+    public function setUrlFrom($authorizationUrl, $other = false)
     {
-        // @todo ?
+        $this->url = $this->serverSelector->findFrom('paybox', $this->type, $authorizationUrl,
+            $other);
     }
 
     /**

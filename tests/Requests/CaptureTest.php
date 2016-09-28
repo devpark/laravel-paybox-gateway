@@ -218,6 +218,36 @@ class CaptureTest extends UnitTestCase
         $this->assertSame(54123123, $parameters['NUMTRANS']);
     }
 
+    /** @test */
+    public function setUrlFrom_it_sets_valid_url_when_looking_for_matching_url()
+    {
+        $authorizationUrl = 'http://authorization.example.com';
+        $finalUrl = 'http://final.example.com';
+
+        $this->ignoreMissingMethods();
+        $this->serverSelector->shouldReceive('findFrom')
+            ->with('paybox', 'paybox_direct', $authorizationUrl, false)->once()
+            ->andReturn($finalUrl);
+
+        $this->request->setUrlFrom($authorizationUrl, false);
+        $this->assertSame($finalUrl, $this->request->getUrl());
+    }
+
+    /** @test */
+    public function setUrlFrom_it_sets_valid_url_when_looking_for_other_url()
+    {
+        $authorizationUrl = 'http://authorization.example.com';
+        $finalUrl = 'http://final.example.com';
+
+        $this->ignoreMissingMethods();
+        $this->serverSelector->shouldReceive('findFrom')
+            ->with('paybox', 'paybox_direct', $authorizationUrl, true)->once()
+            ->andReturn($finalUrl);
+
+        $this->request->setUrlFrom($authorizationUrl, true);
+        $this->assertSame($finalUrl, $this->request->getUrl());
+    }
+
     protected function ignoreMissingMethods()
     {
         $this->config->shouldIgnoreMissing();
