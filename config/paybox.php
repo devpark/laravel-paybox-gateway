@@ -76,16 +76,16 @@ return [
          * Paybox System urls
          */
         'paybox' => [
-            'https://tpeweb.paybox.com/cgi/MYchoix_pagepaiement.cgi',
-            'https://tpeweb1.paybox.com/cgi/MYchoix_pagepaiement.cgi',
+            'https://tpeweb.e-transactions.fr/cgi/MYchoix_pagepaiement.cgi',
+            'https://tpeweb1.e-transactions.fr/cgi/MYchoix_pagepaiement.cgi',
         ],
 
         /*
          * Paybox Direct urls
          */
         'paybox_direct' => [
-            'https://ppps.paybox.com/PPPS.php',
-            'https://ppps1.paybox.com/PPPS.php',
+            'https://ppps.e-transactions.fr/PPPS.php',
+            'https://ppps1.e-transactions.fr/PPPS.php',
         ],
     ],
 
@@ -97,14 +97,14 @@ return [
          * Paybox System urls
          */
         'paybox' => [
-            'https://preprod-tpeweb.paybox.com/cgi/MYchoix_pagepaiement.cgi',
+            'https://preprod-tpeweb.e-transactions.fr/cgi/MYchoix_pagepaiement.cgi',
         ],
 
         /*
          * Paybox Direct urls
          */
         'paybox_direct' => [
-            'https://preprod-ppps.paybox.com/PPPS.php',
+            'https://preprod-ppps.e-transactions.fr/PPPS.php',
         ],
     ],
 ];
