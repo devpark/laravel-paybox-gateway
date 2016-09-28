@@ -35,6 +35,20 @@ class Capture extends Request
     protected $numRequest = null;
 
     /**
+     * Call number provided by Paybox in IPN after authorization request.
+     *
+     * @var string|null
+     */
+    protected $payboxCallNumber = null;
+
+    /**
+     * Transaction number provided by Paybox in IPN after authorization request.
+     *
+     * @var string|null
+     */
+    protected $payboxTransactionNumber = null;
+
+    /**
      * Capture constructor.
      *
      * @param ServerSelector $serverSelector
@@ -52,13 +66,44 @@ class Capture extends Request
         $this->client = $client;
     }
 
+    /**
+     * Set call number provided by Paybox.
+     *
+     * @param string $payboxCallNumber
+     *
+     * @return $this
+     */
+    public function setPayboxCallNumber($payboxCallNumber)
+    {
+        $this->payboxCallNumber = $payboxCallNumber;
+
+        return $this;
+    }
+
+    /**
+     * Set transaction number provided by Paybox.
+     *
+     * @param string $payboxTransactionNumber
+     *
+     * @return $this
+     */
+    public function setPayboxTransactionNumber($payboxTransactionNumber)
+    {
+        $this->payboxTransactionNumber = $payboxTransactionNumber;
+
+        return $this;
+    }
+
+    /**
+     * @param $url
+     */
     public function setUrlFrom($url)
     {
         // @todo ?
     }
 
     /**
-     * Sends Paybox Direct capture request and return response.
+     * Send Paybox Direct capture request and return response.
      *
      * @param array $parameters
      *
@@ -71,6 +116,11 @@ class Capture extends Request
         return new CaptureResponse($this->client->request($this->getUrl(), $parameters));
     }
 
+    /**
+     * Get parameters that will be send to Paybox Direct.
+     *
+     * @return array
+     */
     public function getParameters()
     {
         return [
@@ -84,8 +134,8 @@ class Capture extends Request
             'MONTANT' => $this->amount,
             'DEVISE' => $this->currencyCode,
             'REFERENCE' => $this->paymentNumber,
-            'NUMAPPEL' => '', // @todo
-            'NUMTRANS' => '', // @todo
+            'NUMAPPEL' => $this->payboxCallNumber,
+            'NUMTRANS' => $this->payboxTransactionNumber,
         ];
     }
 

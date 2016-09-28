@@ -66,8 +66,8 @@ class CaptureTest extends UnitTestCase
         $this->assertSame(null, $parameters['MONTANT']);
         $this->assertSame(null, $parameters['DEVISE']);
         $this->assertSame(null, $parameters['REFERENCE']);
-        $this->assertSame('', $parameters['NUMAPPEL']);
-        $this->assertSame('', $parameters['NUMTRANS']);
+        $this->assertSame(null, $parameters['NUMAPPEL']);
+        $this->assertSame(null, $parameters['NUMTRANS']);
     }
 
     /** @test */
@@ -198,6 +198,24 @@ class CaptureTest extends UnitTestCase
         $response = $this->request->send($parameters);
         $this->assertTrue($response instanceof CaptureResponse);
         $this->assertSame($responseBody, $response->getBody());
+    }
+
+    /** @test */
+    public function setPayboxCallNumber_it_gets_valid_paybox_call_number()
+    {
+        $this->ignoreMissingMethods();
+        $this->request->setPayboxCallNumber(671234);
+        $parameters = $this->request->getParameters();
+        $this->assertSame(671234, $parameters['NUMAPPEL']);
+    }
+
+    /** @test */
+    public function setPayboxTransactionNumber_it_gets_valid_paybox_transaction_number()
+    {
+        $this->ignoreMissingMethods();
+        $this->request->setPayboxTransactionNumber(54123123);
+        $parameters = $this->request->getParameters();
+        $this->assertSame(54123123, $parameters['NUMTRANS']);
     }
 
     protected function ignoreMissingMethods()
