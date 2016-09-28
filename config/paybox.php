@@ -22,6 +22,12 @@ return [
     'id' => env('PAYBOX_ID', ''),
 
     /*
+     * Password for Paybox back-office (It's required for Paybox direct - when you use
+     * capturing, otherwise it won't be used) 
+     */
+    'back_office_password' => env('PAYBOX_BACK_OFFICE_PASSWORD', ''),
+
+    /*
      * HMAC authentication key - it should be generated in Paybox merchant panel
      */
     'hmac_key' => env('PAYBOX_HMAC_KEY', ''),
