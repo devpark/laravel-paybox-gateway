@@ -2,6 +2,11 @@
 
 namespace Devpark\PayboxGateway;
 
+/**
+ * Class ResponseCode.
+ * 
+ * It contains response codes from Paybox System
+ */
 class ResponseCode
 {
     const SUCCESS = '00000';
