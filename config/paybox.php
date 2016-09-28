@@ -79,6 +79,14 @@ return [
             'https://tpeweb.paybox.com/cgi/MYchoix_pagepaiement.cgi',
             'https://tpeweb1.paybox.com/cgi/MYchoix_pagepaiement.cgi',
         ],
+
+        /*
+         * Paybox Direct urls
+         */
+        'paybox_direct' => [
+            'https://ppps.paybox.com/PPPS.php',
+            'https://ppps1.paybox.com/PPPS.php',
+        ],
     ],
 
     /*
@@ -90,6 +98,13 @@ return [
          */
         'paybox' => [
             'https://preprod-tpeweb.paybox.com/cgi/MYchoix_pagepaiement.cgi',
+        ],
+
+        /*
+         * Paybox Direct urls
+         */
+        'paybox_direct' => [
+            'https://preprod-ppps.paybox.com/PPPS.php',
         ],
     ],
 ];
