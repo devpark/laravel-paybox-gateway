@@ -167,7 +167,7 @@ class CaptureTest extends UnitTestCase
             'c' => 'd',
         ];
         $sampleUrl = 'https://example.com';
-        $responseBody = 'foo&bar&x=z';
+        $responseBody = 'foo=bar&x=z';
 
         $this->request->shouldReceive('getParameters')->withNoArgs()->once()
             ->andReturn($parameters);
@@ -188,7 +188,7 @@ class CaptureTest extends UnitTestCase
             'c' => 'd',
         ];
         $sampleUrl = 'https://example.com';
-        $responseBody = 'foo&bar&x=z';
+        $responseBody = 'foo=bar&x=z';
 
         $this->request->shouldNotReceive('getParameters');
         $this->request->shouldReceive('getUrl')->withNoArgs()->once()->andReturn($sampleUrl);
