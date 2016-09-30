@@ -117,11 +117,13 @@ class VerifyTest extends UnitTestCase
         $this->assertFalse($result);
     }
 
+    /** @test */
     public function setParametersMap_it_uses_valid_parameters_when_set()
     {
         $amount = 23.32;
         $expectedAmount = 2332;
         $parameters = ['foo' => 'bar'];
+        $signature = 'sampleSignature';
 
         $this->verify->setParametersMap([
             ResponseField::AMOUNT => 'money',
@@ -131,10 +133,10 @@ class VerifyTest extends UnitTestCase
         ]);
 
         $this->verify->shouldReceive('checkSignature')->withNoArgs()->once()->passthru();
-        $this->request->shouldReceive('all')->withNoArgs()->once()->andReturn($parameters);
-        $this->signatureVerifier->shouldReceive('isCorrect')->with('sig', $parameters)->once()
-            ->andThrow(InvalidSignature::class);
-
+        $this->request->shouldReceive('input')->with('sig')->once()->andReturn($signature);
+        $this->request->shouldReceive('except')->with('sig')->once()->andReturn($parameters);
+        $this->signatureVerifier->shouldReceive('isCorrect')->with($signature, $parameters)->once()
+            ->andReturn(true);
         $this->request->shouldReceive('input')->with('nr')->once()
             ->andReturn('Sample number');
         $this->request->shouldReceive('input')->with('code')->once()
@@ -142,7 +144,7 @@ class VerifyTest extends UnitTestCase
 
         $this->request->shouldReceive('input')->with('money')->once()
             ->andReturn($expectedAmount);
-        $this->amountService->shouldReceive('get')->with($amount)->once()
+        $this->amountService->shouldReceive('get')->with($amount, false)->once()
             ->andReturn($expectedAmount);
 
         $result = $this->verify->isSuccess($amount);
