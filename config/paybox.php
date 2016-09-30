@@ -48,9 +48,10 @@ return [
         'order_number' => \Devpark\PayboxGateway\ResponseField::ORDER_NUMBER,
         'response_code' => \Devpark\PayboxGateway\ResponseField::RESPONSE_CODE,
         'payment_type' => \Devpark\PayboxGateway\ResponseField::PAYMENT_TYPE,
-        'signature' => \Devpark\PayboxGateway\ResponseField::SIGNATURE,
         'call_number' => \Devpark\PayboxGateway\ResponseField::PAYBOX_CALL_NUMBER,
         'transaction_number' => \Devpark\PayboxGateway\ResponseField::TRANSACTION_NUMBER,
+        // signature should be always last return field
+        'signature' => \Devpark\PayboxGateway\ResponseField::SIGNATURE,
     ],
 
     /*
