@@ -75,6 +75,16 @@ class Verify
     }
 
     /**
+     * Get Paybox response code.
+     *
+     * @return string
+     */
+    public function getResponseCode()
+    {
+        return (string) $this->request->input($this->parameters[ResponseField::RESPONSE_CODE]);
+    }
+
+    /**
      * Set parameters map in order to make it possible to verify request in case custom request
      * parameters names vere used.
      *

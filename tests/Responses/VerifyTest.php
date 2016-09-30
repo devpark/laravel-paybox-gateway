@@ -150,4 +150,13 @@ class VerifyTest extends UnitTestCase
         $result = $this->verify->isSuccess($amount);
         $this->assertTrue($result);
     }
+
+    /** @test */
+    public function getResponseCode_it_gets_valid_response_code()
+    {
+        $responseCode = 123123;
+        $this->request->shouldReceive('input')->with('response_code')->andReturn($responseCode);
+        $result = $this->verify->getResponseCode();
+        $this->assertSame('123123', $result);
+    }
 }
