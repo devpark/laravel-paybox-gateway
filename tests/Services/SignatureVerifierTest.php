@@ -26,7 +26,7 @@ class SignatureVerifierTest extends UnitTestCase
 
         $signatureVerifier = m::mock(SignatureVerifier::class, [$config, $files])->makePartial();
 
-        $config->shouldReceive('get')->with('paybox.public_key.pem')->once()
+        $config->shouldReceive('get')->with('paybox.public_key')->once()
             ->andReturn(realpath(__DIR__ . '/../keys/pubkey.pem'));
 
         $result = $signatureVerifier->isCorrect(base64_encode($signature), $parameters);
@@ -47,7 +47,7 @@ class SignatureVerifierTest extends UnitTestCase
 
         $signatureVerifier = m::mock(SignatureVerifier::class, [$config, $files])->makePartial();
 
-        $config->shouldReceive('get')->with('paybox.public_key.pem')->once()
+        $config->shouldReceive('get')->with('paybox.public_key')->once()
             ->andReturn(realpath(__DIR__ . '/../keys/pubkey.pem'));
 
         $result = $signatureVerifier->isCorrect(base64_encode($signature), $parameters);
