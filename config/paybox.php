@@ -36,7 +36,7 @@ return [
      * Paybox public key location - you can get it from 
      * http://www1.paybox.com/wp-content/uploads/2014/03/pubkey.pem
      */
-    'public_key' => storage_path('app/private/paybox/pubkey.pem'),
+    'public_key' => storage_path('paybox/pubkey.pem'),
 
     /*
      * Default return fields when going back from Paybox. You can change here keys as you want,
