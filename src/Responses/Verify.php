@@ -110,7 +110,7 @@ class Verify
     {
         $signatureParameter = $this->parameters[ResponseField::SIGNATURE];
 
-        if (! $this->signatureVerifier->isCorrect($signatureParameter,
+        if (! $this->signatureVerifier->isCorrect($this->request->input($signatureParameter),
             $this->request->except($signatureParameter))
         ) {
             throw new InvalidSignature();

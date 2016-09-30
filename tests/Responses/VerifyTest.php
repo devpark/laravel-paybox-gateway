@@ -35,10 +35,12 @@ class VerifyTest extends UnitTestCase
     {
         $amount = 23.32;
         $parameters = ['a' => 'b', 'c' => 'd', 'e' => 'f'];
+        $signature = 'sampleSignature';
 
         $this->verify->shouldReceive('checkSignature')->withNoArgs()->once()->passthru();
+        $this->request->shouldReceive('input')->with('signature')->once()->andReturn($signature);
         $this->request->shouldReceive('except')->with('signature')->once()->andReturn($parameters);
-        $this->signatureVerifier->shouldReceive('isCorrect')->with('signature', $parameters)->once()
+        $this->signatureVerifier->shouldReceive('isCorrect')->with($signature, $parameters)->once()
             ->andReturn(false);
 
         $this->expectException(InvalidSignature::class);
