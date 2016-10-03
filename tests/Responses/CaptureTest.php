@@ -12,7 +12,9 @@ class CaptureTest extends UnitTestCase
     /** @test */
     public function getFields_it_gets_valid_fields()
     {
-        $responseBody = 'foo=bar&a=b&c=d';
+        $frenchMessage = 'Transaction non trouvé';
+
+        $responseBody = 'foo=bar&a=b&c=d&message=' . iconv('UTF-8', 'ISO-8859-1', $frenchMessage);
 
         $response = m::mock(Capture::class, [$responseBody])->makePartial();
 
@@ -21,6 +23,7 @@ class CaptureTest extends UnitTestCase
             'foo' => 'bar',
             'a' => 'b',
             'c' => 'd',
+            'message' => $frenchMessage,
         ], $fields);
     }
 

@@ -94,7 +94,7 @@ class Capture
 
         array_walk($fields, function (&$item, &$key) {
             list($key, $item) = explode('=', $item);
-            $this->fields[$key] = $item;
+            $this->fields[$key] = iconv('ISO-8859-1', 'UTF-8', $item);
         });
     }
 }

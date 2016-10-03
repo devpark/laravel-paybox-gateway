@@ -4,7 +4,8 @@
   "require": {
     "laravel/framework": "5.*",
     "guzzlehttp/guzzle": "^6.2",
-    "ext-openssl": "*"
+    "ext-openssl": "*",
+    "ext-iconv": "*"
   },
   "autoload": {
     "psr-4": {
