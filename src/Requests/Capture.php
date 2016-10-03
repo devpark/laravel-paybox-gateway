@@ -166,7 +166,7 @@ class Capture extends Request
             throw new Exception(('Number of request should in range <1,2147483647>'));
         }
 
-        $this->numRequest = $dayRequestNumber;
+        $this->numRequest = str_pad($dayRequestNumber, 10, '0', STR_PAD_LEFT);
 
         return $this;
     }

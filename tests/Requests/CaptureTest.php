@@ -135,6 +135,15 @@ class CaptureTest extends UnitTestCase
     }
 
     /** @test */
+    public function setDayRequestNumber_it_sets_valid_request_number()
+    {
+        $this->ignoreMissingMethods();
+        $this->request->setDayRequestNumber(51234);
+        $parameters = $this->request->getParameters();
+        $this->assertSame('0000051234', $parameters['NUMQUESTION']);
+    }
+
+    /** @test */
     public function getUrl_it_fires_server_selector_once()
     {
         $validUrl = 'https://sample.com/valid/server/url';
