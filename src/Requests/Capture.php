@@ -100,11 +100,15 @@ class Capture extends Request
      *
      * @param string $authorizationUrl
      * @param bool $other
+     *
+     * @return $this
      */
     public function setUrlFrom($authorizationUrl, $other = false)
     {
         $this->url = $this->serverSelector->findFrom('paybox', $this->type, $authorizationUrl,
             $other);
+
+        return $this;
     }
 
     /**
@@ -149,6 +153,7 @@ class Capture extends Request
      *
      * @param $dayRequestNumber
      *
+     * @return $this
      * @throws Exception
      */
     public function setDayRequestNumber($dayRequestNumber)
@@ -162,6 +167,8 @@ class Capture extends Request
         }
 
         $this->numRequest = $dayRequestNumber;
+
+        return $this;
     }
 
     /**
