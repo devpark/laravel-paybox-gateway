@@ -62,6 +62,16 @@ class Capture
     }
 
     /**
+     * Get Paybox response code.
+     *
+     * @return string
+     */
+    public function getResponseCode()
+    {
+        return $this->fields['CODEREPONSE'];
+    }
+
+    /**
      * Verify whether request should be repeated to secondary server.
      *
      * @return bool

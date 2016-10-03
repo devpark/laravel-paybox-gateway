@@ -79,4 +79,12 @@ class CaptureTest extends UnitTestCase
         $response = m::mock(Capture::class, [$responseBody])->makePartial();
         $this->assertTrue($response->shouldBeRepeated());
     }
+
+    /** @test */
+    public function getResponseCode_it_returns_valid_response_code()
+    {
+        $responseBody = 'foo=bar&a=b&c=d&CODEREPONSE=' . DirectResponseCode::INCOHERENCE_ERROR;
+        $response = m::mock(Capture::class, [$responseBody])->makePartial();
+        $this->assertSame(DirectResponseCode::INCOHERENCE_ERROR, $response->getResponseCode());
+    }
 }
