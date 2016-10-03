@@ -133,18 +133,18 @@ class Capture extends Request
     public function getParameters()
     {
         return [
+            'VERSION' => '00104',
+            'TYPE' => '00002',
             'SITE' => $this->config->get('paybox.site'),
             'RANG' => $this->config->get('paybox.rank'),
-            'VERSION' => '00103',
-            'TYPE' => '00002',
-            'DATEQ' => $this->getFormattedDate($this->time ?: Carbon::now()),
-            'NUMQUESTION' => $this->numRequest,
             'CLE' => $this->config->get('paybox.back_office_password'),
+            'NUMQUESTION' => $this->numRequest,
             'MONTANT' => $this->amount,
             'DEVISE' => $this->currencyCode,
             'REFERENCE' => $this->paymentNumber,
             'NUMAPPEL' => $this->payboxCallNumber,
             'NUMTRANS' => $this->payboxTransactionNumber,
+            'DATEQ' => $this->getFormattedDate($this->time ?: Carbon::now()),
         ];
     }
 

@@ -58,7 +58,7 @@ class CaptureTest extends UnitTestCase
 
         $this->assertSame($sampleSite, $parameters['SITE']);
         $this->assertSame($sampleRank, $parameters['RANG']);
-        $this->assertSame('00103', $parameters['VERSION']);
+        $this->assertSame('00104', $parameters['VERSION']);
         $this->assertSame('00002', $parameters['TYPE']);
         $this->assertSame($now->format('dmYHis'), $parameters['DATEQ']);
         $this->assertSame(null, $parameters['NUMQUESTION']);
