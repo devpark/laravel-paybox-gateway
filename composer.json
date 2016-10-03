@@ -17,6 +17,7 @@
       "Tests\\": "tests"
     }
   },
+  "license": "MIT",  
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require-dev": {
