@@ -152,6 +152,58 @@ class VerifyTest extends UnitTestCase
     }
 
     /** @test */
+    public function setParametersMap_it_throws_exception_when_no_amount_field_given()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Amount is missing');
+
+        $this->verify->setParametersMap([
+            ResponseField::AUTHORIZATION_NUMBER => 'nr',
+            ResponseField::RESPONSE_CODE => 'code',
+            ResponseField::SIGNATURE => 'sig',
+        ]);
+    }
+
+    /** @test */
+    public function setParametersMap_it_throws_exception_when_no_authorization_number_given()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Authorization number is missing');
+
+        $this->verify->setParametersMap([
+            ResponseField::AMOUNT => 'money',
+            ResponseField::RESPONSE_CODE => 'code',
+            ResponseField::SIGNATURE => 'sig',
+        ]);
+    }
+
+    /** @test */
+    public function setParametersMap_it_throws_exception_when_no_response_code_given()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Response code is missing');
+
+        $this->verify->setParametersMap([
+            ResponseField::AMOUNT => 'money',
+            ResponseField::AUTHORIZATION_NUMBER => 'nr',
+            ResponseField::SIGNATURE => 'sig',
+        ]);
+    }
+
+    /** @test */
+    public function setParametersMap_it_throws_exception_when_no_signature_given()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Signature is missing');
+
+        $this->verify->setParametersMap([
+            ResponseField::AMOUNT => 'money',
+            ResponseField::AUTHORIZATION_NUMBER => 'nr',
+            ResponseField::RESPONSE_CODE => 'code',
+        ]);
+    }
+
+    /** @test */
     public function getResponseCode_it_gets_valid_response_code()
     {
         $responseCode = 123123;

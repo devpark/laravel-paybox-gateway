@@ -86,7 +86,7 @@ class ServerSelector
 
         foreach ($urls as $url) {
             $result = parse_url($url);
-            if ($result === false) {
+            if ($result === false || ! array_key_exists('host', $result)) {
                 throw new Exception("Url {$url} is invalid");
             }
 
@@ -114,6 +114,7 @@ class ServerSelector
      * Get document loader.
      *
      * @return DOMDocument
+     * @codeCoverageIgnore
      */
     protected function getDocumentLoader()
     {
