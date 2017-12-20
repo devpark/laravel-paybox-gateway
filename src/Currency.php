@@ -1,6 +1,6 @@
 <?php
 
-namespace Devpark\PayboxGateway;
+namespace Bnb\PayboxGateway;
 
 /**
  * Class Currency.

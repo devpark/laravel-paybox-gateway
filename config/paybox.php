@@ -22,12 +22,6 @@ return [
     'id' => env('PAYBOX_ID', ''),
 
     /*
-     * Password for Paybox back-office (It's required for Paybox direct - when you use
-     * capturing, otherwise it won't be used) 
-     */
-    'back_office_password' => env('PAYBOX_BACK_OFFICE_PASSWORD', ''),
-
-    /*
      * HMAC authentication key - it should be generated in Paybox merchant panel
      */
     'hmac_key' => env('PAYBOX_HMAC_KEY', ''),
@@ -43,15 +37,15 @@ return [
      * you can add also more values from ResponseField class     
      */
     'return_fields' => [
-        'amount' => \Devpark\PayboxGateway\ResponseField::AMOUNT,
-        'authorization_number' => \Devpark\PayboxGateway\ResponseField::AUTHORIZATION_NUMBER,
-        'order_number' => \Devpark\PayboxGateway\ResponseField::ORDER_NUMBER,
-        'response_code' => \Devpark\PayboxGateway\ResponseField::RESPONSE_CODE,
-        'payment_type' => \Devpark\PayboxGateway\ResponseField::PAYMENT_TYPE,
-        'call_number' => \Devpark\PayboxGateway\ResponseField::PAYBOX_CALL_NUMBER,
-        'transaction_number' => \Devpark\PayboxGateway\ResponseField::TRANSACTION_NUMBER,
+        'amount' => \Bnb\PayboxGateway\ResponseField::AMOUNT,
+        'authorization_number' => \Bnb\PayboxGateway\ResponseField::AUTHORIZATION_NUMBER,
+        'order_number' => \Bnb\PayboxGateway\ResponseField::ORDER_NUMBER,
+        'response_code' => \Bnb\PayboxGateway\ResponseField::RESPONSE_CODE,
+        'payment_type' => \Bnb\PayboxGateway\ResponseField::PAYMENT_TYPE,
+        'call_number' => \Bnb\PayboxGateway\ResponseField::PAYBOX_CALL_NUMBER,
+        'transaction_number' => \Bnb\PayboxGateway\ResponseField::TRANSACTION_NUMBER,
         // signature should be always last return field
-        'signature' => \Devpark\PayboxGateway\ResponseField::SIGNATURE,
+        'signature' => \Bnb\PayboxGateway\ResponseField::SIGNATURE,
     ],
 
     /*

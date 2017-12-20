@@ -1,6 +1,6 @@
 <?php
 
-namespace Devpark\PayboxGateway\Services;
+namespace Bnb\PayboxGateway\Services;
 
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Filesystem\Filesystem;

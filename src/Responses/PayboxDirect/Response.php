@@ -1,11 +1,13 @@
 <?php
 
-namespace Devpark\PayboxGateway\Responses;
+namespace Bnb\PayboxGateway\Responses\PayboxDirect;
 
-use Devpark\PayboxGateway\DirectResponseCode;
+use Bnb\PayboxGateway\DirectResponseCode;
+use Bnb\PayboxGateway\DirectResponseField;
 
-class Capture
+abstract class Response
 {
+
     /**
      * Response body.
      *
@@ -20,6 +22,7 @@ class Capture
      */
     protected $fields = [];
 
+
     /**
      * Capture constructor.
      *
@@ -31,6 +34,7 @@ class Capture
         $this->setFields();
     }
 
+
     /**
      * Get response body.
      *
@@ -40,6 +44,7 @@ class Capture
     {
         return $this->body;
     }
+
 
     /**
      * Get fields from body.
@@ -51,6 +56,20 @@ class Capture
         return $this->fields;
     }
 
+
+    /**
+     * Get a field from body.
+     *
+     * @return mixed|null
+     *
+     * @see DirectResponseField
+     */
+    public function getField($key)
+    {
+        return isset($this->fields[$key]) ? $this->fields[$key] : null;
+    }
+
+
     /**
      * Verify whether request was successful.
      *
@@ -58,8 +77,9 @@ class Capture
      */
     public function isSuccess()
     {
-        return $this->fields['CODEREPONSE'] == DirectResponseCode::SUCCESS;
+        return $this->fields[DirectResponseField::RESPONSE_CODE] == DirectResponseCode::SUCCESS;
     }
+
 
     /**
      * Get Paybox response code.
@@ -68,8 +88,9 @@ class Capture
      */
     public function getResponseCode()
     {
-        return $this->fields['CODEREPONSE'];
+        return $this->fields[DirectResponseField::RESPONSE_CODE];
     }
+
 
     /**
      * Verify whether request should be repeated to secondary server.
@@ -82,8 +103,9 @@ class Capture
             DirectResponseCode::CONNECTION_FAILED,
             DirectResponseCode::TIMEOUT,
             DirectResponseCode::INTERNAL_TIMEOUT,
-        ])->contains($this->fields['CODEREPONSE']);
+        ])->contains($this->fields[DirectResponseField::RESPONSE_CODE]);
     }
+
 
     /**
      * Set fields from response body.
@@ -94,7 +116,7 @@ class Capture
 
         array_walk($fields, function (&$item, &$key) {
             list($key, $item) = explode('=', $item);
-            $this->fields[$key] = iconv('ISO-8859-1', 'UTF-8', $item);
+            $this->fields[$key] = urldecode(iconv('ISO-8859-1', 'UTF-8', $item));
         });
     }
 }

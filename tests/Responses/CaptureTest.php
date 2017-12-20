@@ -2,10 +2,10 @@
 
 namespace Tests\Responses;
 
-use Devpark\PayboxGateway\DirectResponseCode;
-use Devpark\PayboxGateway\Responses\Capture;
-use Tests\UnitTestCase;
+use Bnb\PayboxGateway\DirectResponseCode;
+use Bnb\PayboxGateway\Responses\PayboxDirect\Capture;
 use Mockery as m;
+use Tests\UnitTestCase;
 
 class CaptureTest extends UnitTestCase
 {
@@ -55,7 +55,7 @@ class CaptureTest extends UnitTestCase
     public function shouldBeRepeated_it_returns_false_when_other_error()
     {
         $responseBody = 'foo=bar&a=b&c=d&CODEREPONSE=' . DirectResponseCode::INCOHERENCE_ERROR;
-        $response = m::mock(Capture::class, [$responseBody])->makePartial();
+        $response = m::mock(\Bnb\PayboxGateway\Responses\PayboxDirect\Capture::class, [$responseBody])->makePartial();
         $this->assertFalse($response->shouldBeRepeated());
     }
 

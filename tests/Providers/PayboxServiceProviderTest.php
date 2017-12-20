@@ -2,7 +2,7 @@
 
 namespace Tests\Providers;
 
-use Devpark\PayboxGateway\Providers\PayboxServiceProvider;
+use Bnb\PayboxGateway\Providers\PayboxServiceProvider;
 use Illuminate\Foundation\Application;
 use Tests\UnitTestCase;
 use Mockery as m;

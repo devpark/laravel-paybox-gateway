@@ -1,12 +1,12 @@
 <?php
 
-namespace Devpark\PayboxGateway\Responses;
+namespace Bnb\PayboxGateway\Responses\Paybox;
 
-use Devpark\PayboxGateway\ResponseCode;
-use Devpark\PayboxGateway\ResponseField;
-use Devpark\PayboxGateway\Responses\Exceptions\InvalidSignature;
-use Devpark\PayboxGateway\Services\Amount;
-use Devpark\PayboxGateway\Services\SignatureVerifier;
+use Bnb\PayboxGateway\ResponseCode;
+use Bnb\PayboxGateway\ResponseField;
+use Bnb\PayboxGateway\Responses\Exceptions\InvalidSignature;
+use Bnb\PayboxGateway\Services\Amount;
+use Bnb\PayboxGateway\Services\SignatureVerifier;
 use Exception;
 use Illuminate\Http\Request;
 

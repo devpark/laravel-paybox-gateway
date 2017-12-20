@@ -1,6 +1,6 @@
 <?php
 
-namespace Devpark\PayboxGateway\HttpClient;
+namespace Bnb\PayboxGateway\HttpClient;
 
 use GuzzleHttp\Client;
 

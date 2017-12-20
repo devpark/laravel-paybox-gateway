@@ -1,6 +1,6 @@
 <?php
 
-namespace Devpark\PayboxGateway\Services;
+namespace Bnb\PayboxGateway\Services;
 
 class Amount
 {

@@ -3,8 +3,8 @@
 namespace Tests\Requests;
 
 use Carbon\Carbon;
-use Devpark\PayboxGateway\Currency;
-use Devpark\PayboxGateway\Language;
+use Bnb\PayboxGateway\Currency;
+use Bnb\PayboxGateway\Language;
 use Tests\Helpers\Authorization as AuthorizationHelper;
 use Tests\UnitTestCase;
 

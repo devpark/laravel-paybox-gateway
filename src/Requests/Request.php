@@ -1,12 +1,12 @@
 <?php
 
-namespace Devpark\PayboxGateway\Requests;
+namespace Bnb\PayboxGateway\Requests;
 
 use Carbon\Carbon;
-use Devpark\PayboxGateway\Currency;
-use Devpark\PayboxGateway\Services\ServerSelector;
+use Bnb\PayboxGateway\Currency;
+use Bnb\PayboxGateway\Services\ServerSelector;
 use Illuminate\Contracts\Config\Repository as Config;
-use Devpark\PayboxGateway\Services\Amount;
+use Bnb\PayboxGateway\Services\Amount;
 
 abstract class Request
 {

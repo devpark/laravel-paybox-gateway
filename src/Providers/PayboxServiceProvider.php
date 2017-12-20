@@ -1,6 +1,6 @@
 <?php
 
-namespace Devpark\PayboxGateway\Providers;
+namespace Bnb\PayboxGateway\Providers;
 
 use Illuminate\Support\ServiceProvider;
 

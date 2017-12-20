@@ -2,13 +2,13 @@
 
 namespace Tests\Helpers;
 
-use Devpark\PayboxGateway\Requests\AuthorizationWithCapture;
-use Devpark\PayboxGateway\Services\Amount;
-use Devpark\PayboxGateway\Services\HmacHashGenerator;
-use Devpark\PayboxGateway\Services\ServerSelector;
+use Bnb\PayboxGateway\Requests\Paybox\AuthorizationWithCapture;
+use Bnb\PayboxGateway\Services\Amount;
+use Bnb\PayboxGateway\Services\HmacHashGenerator;
+use Bnb\PayboxGateway\Services\ServerSelector;
+use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Contracts\View\Factory as ViewFactory;
-use Illuminate\Contracts\Config\Repository as Config;
 use Mockery as m;
 
 trait Authorization

@@ -1,15 +1,15 @@
 {
-  "name": "devpark/laravel-paybox-gateway",
+  "name": "bnbwebexpertise/laravel-paybox-gateway",
   "description": "Laravel Paybox gateway",
   "require": {
     "laravel/framework": "5.*",
-    "guzzlehttp/guzzle": "^6.2",
+    "guzzlehttp/guzzle": "^5.3|^6.2",
     "ext-openssl": "*",
     "ext-iconv": "*"
   },
   "autoload": {
     "psr-4": {
-      "Devpark\\PayboxGateway\\": "src/"
+      "Bnb\\PayboxGateway\\": "src/"
     }
   },
   "autoload-dev": {
@@ -23,5 +23,15 @@
   "require-dev": {
     "phpunit/phpunit": "^5.4",
     "mockery/mockery": "^0.9.5"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.x-dev"
+    },
+    "laravel": {
+      "providers": [
+        "Bnb\\PayboxGateway\\Providers\\PayboxServiceProvider"
+      ]
+    }
   }
 }

@@ -2,9 +2,9 @@
 
 namespace Tests\Requests;
 
-use Devpark\PayboxGateway\Requests\AuthorizationWithoutCapture;
-use Tests\UnitTestCase;
+use Bnb\PayboxGateway\Requests\Paybox\AuthorizationWithoutCapture;
 use Tests\Helpers\Authorization as AuthorizationHelper;
+use Tests\UnitTestCase;
 
 class AuthorizationWithoutCaptureTest extends UnitTestCase
 {

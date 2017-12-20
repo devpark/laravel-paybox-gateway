@@ -2,15 +2,15 @@
 
 namespace Tests\Responses;
 
-use Devpark\PayboxGateway\ResponseCode;
-use Devpark\PayboxGateway\ResponseField;
-use Devpark\PayboxGateway\Responses\Exceptions\InvalidSignature;
-use Devpark\PayboxGateway\Responses\Verify;
-use Devpark\PayboxGateway\Services\Amount;
-use Devpark\PayboxGateway\Services\SignatureVerifier;
+use Bnb\PayboxGateway\ResponseCode;
+use Bnb\PayboxGateway\ResponseField;
+use Bnb\PayboxGateway\Responses\Exceptions\InvalidSignature;
+use Bnb\PayboxGateway\Responses\Paybox\Verify;
+use Bnb\PayboxGateway\Services\Amount;
+use Bnb\PayboxGateway\Services\SignatureVerifier;
 use Illuminate\Http\Request;
-use Tests\UnitTestCase;
 use Mockery as m;
+use Tests\UnitTestCase;
 
 class VerifyTest extends UnitTestCase
 {

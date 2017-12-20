@@ -1,6 +1,6 @@
 <?php
 
-namespace Devpark\PayboxGateway\Requests;
+namespace Bnb\PayboxGateway\Requests\Paybox;
 
 class AuthorizationWithCapture extends Authorization
 {

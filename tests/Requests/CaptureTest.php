@@ -2,17 +2,16 @@
 
 namespace Tests\Requests;
 
+use Bnb\PayboxGateway\Currency;
+use Bnb\PayboxGateway\HttpClient\GuzzleHttpClient;
+use Bnb\PayboxGateway\Responses\PayboxDirect\Capture as CaptureResponse;
+use Bnb\PayboxGateway\Services\Amount;
+use Bnb\PayboxGateway\Services\ServerSelector;
 use Carbon\Carbon;
-use Devpark\PayboxGateway\Currency;
-use Devpark\PayboxGateway\HttpClient\GuzzleHttpClient;
-use Devpark\PayboxGateway\Requests\Capture;
-use Devpark\PayboxGateway\Responses\Capture as CaptureResponse;
-use Devpark\PayboxGateway\Services\Amount;
-use Devpark\PayboxGateway\Services\ServerSelector;
 use Exception;
-use Tests\UnitTestCase;
 use Illuminate\Contracts\Config\Repository as Config;
 use Mockery as m;
+use Tests\UnitTestCase;
 
 class CaptureTest extends UnitTestCase
 {
@@ -29,7 +28,7 @@ class CaptureTest extends UnitTestCase
         $this->config = m::mock(Config::class);
         $this->amountService = m::mock(Amount::class);
         $this->client = m::mock(GuzzleHttpClient::class);
-        $this->request = m::mock(Capture::class,
+        $this->request = m::mock(\Bnb\PayboxGateway\Requests\PayboxDirect\Capture::class,
             [
                 $this->serverSelector,
                 $this->config,
@@ -47,12 +46,9 @@ class CaptureTest extends UnitTestCase
 
         $sampleSite = 'SITE-NR';
         $sampleRank = 'SITE-RANK';
-        $backOfficePassword = '2132312';
 
         $this->config->shouldReceive('get')->with('paybox.site')->once()->andReturn($sampleSite);
         $this->config->shouldReceive('get')->with('paybox.rank')->once()->andReturn($sampleRank);
-        $this->config->shouldReceive('get')->with('paybox.back_office_password')->once()
-            ->andReturn($backOfficePassword);
 
         $parameters = $this->request->getParameters();
 

@@ -1,16 +1,17 @@
 <?php
 
-namespace Devpark\PayboxGateway\Requests;
+namespace Bnb\PayboxGateway\Requests\Paybox;
 
+use Bnb\PayboxGateway\Language;
+use Bnb\PayboxGateway\Requests\Request;
+use Bnb\PayboxGateway\Services\Amount;
+use Bnb\PayboxGateway\Services\HmacHashGenerator;
+use Bnb\PayboxGateway\Services\ServerSelector;
 use Carbon\Carbon;
-use Devpark\PayboxGateway\Language;
-use Devpark\PayboxGateway\Services\Amount;
-use Devpark\PayboxGateway\Services\HmacHashGenerator;
-use Devpark\PayboxGateway\Services\ServerSelector;
 use Illuminate\Contracts\Config\Repository as Config;
+use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\Routing\Router;
-use Illuminate\Contracts\Routing\UrlGenerator;
 
 abstract class Authorization extends Request
 {
