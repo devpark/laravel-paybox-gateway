@@ -3,6 +3,7 @@
 namespace Bnb\PayboxGateway\Requests\PayboxDirect;
 
 use Bnb\PayboxGateway\ActivityCode;
+use Bnb\PayboxGateway\DirectQuestionField;
 use Bnb\PayboxGateway\QuestionTypeCode;
 use Bnb\PayboxGateway\Responses\PayboxDirect\SubscriberAuthorization as SubscriberAuthorizationResponse;
 use Carbon\Carbon;
@@ -81,14 +82,14 @@ class SubscriberAuthorization extends SubscriberRequest
     public function getBasicParameters()
     {
         return [
-            'MONTANT' => $this->amount,
-            'DEVISE' => $this->currencyCode,
-            'REFERENCE' => $this->paymentNumber,
-            'REFABONNE' => $this->subscriberNumber,
-            'PORTEUR' => $this->subscriberWallet,
-            'DATEVAL' => $this->cardExpirationDate,
-            'CVV' => $this->cardControlNumber,
-            'ACTIVITE' => $this->activity,
+            DirectQuestionField::AMOUNT => $this->amount,
+            DirectQuestionField::CURRENCY => $this->currencyCode,
+            DirectQuestionField::REFERENCE => $this->paymentNumber,
+            DirectQuestionField::SUBSCRIBER_NUMBER => $this->subscriberNumber,
+            DirectQuestionField::CARD_OR_WALLET_NUMBER => $this->subscriberWallet,
+            DirectQuestionField::CARD_EXPIRATION_DATE => $this->cardExpirationDate,
+            DirectQuestionField::CARD_CONTROL_NUMBER => $this->cardControlNumber,
+            DirectQuestionField::ACTIVITY => $this->activity,
         ];
     }
 

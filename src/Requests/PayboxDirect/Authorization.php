@@ -3,6 +3,7 @@
 namespace Bnb\PayboxGateway\Requests\PayboxDirect;
 
 use Bnb\PayboxGateway\ActivityCode;
+use Bnb\PayboxGateway\DirectQuestionField;
 use Bnb\PayboxGateway\QuestionTypeCode;
 use Bnb\PayboxGateway\Responses\PayboxDirect\Authorization as AuthorizationResponse;
 use Carbon\Carbon;
@@ -101,13 +102,13 @@ class Authorization extends DirectRequest
     public function getBasicParameters()
     {
         return [
-            'MONTANT' => $this->amount,
-            'DEVISE' => $this->currencyCode,
-            'REFERENCE' => $this->paymentNumber,
-            'PORTEUR' => $this->cardNumber,
-            'DATEVAL' => $this->cardExpirationDate,
-            'CVV' => $this->cardControlNumber,
-            'ACTIVITE' => $this->activity,
+            DirectQuestionField::AMOUNT => $this->amount,
+            DirectQuestionField::CURRENCY => $this->currencyCode,
+            DirectQuestionField::REFERENCE => $this->paymentNumber,
+            DirectQuestionField::CARD_OR_WALLET_NUMBER => $this->cardNumber,
+            DirectQuestionField::CARD_EXPIRATION_DATE => $this->cardExpirationDate,
+            DirectQuestionField::CARD_CONTROL_NUMBER => $this->cardControlNumber,
+            DirectQuestionField::ACTIVITY => $this->activity,
         ];
     }
 

@@ -2,13 +2,15 @@
 
 namespace Bnb\PayboxGateway\Requests\PayboxDirect;
 
+use Bnb\PayboxGateway\DirectQuestionField;
 use Bnb\PayboxGateway\HttpClient\GuzzleHttpClient;
+use Bnb\PayboxGateway\Models\Question;
+use Bnb\PayboxGateway\Models\Response;
 use Bnb\PayboxGateway\Requests\Request;
 use Bnb\PayboxGateway\Services\Amount;
 use Bnb\PayboxGateway\Services\HmacHashGenerator;
 use Bnb\PayboxGateway\Services\ServerSelector;
 use Carbon\Carbon;
-use Exception;
 use Illuminate\Contracts\Config\Repository as Config;
 
 abstract class DirectRequest extends Request
@@ -30,13 +32,6 @@ abstract class DirectRequest extends Request
     protected $amountFill = true;
 
     /**
-     * Number of request in current day.
-     *
-     * @var int|null
-     */
-    protected $numRequest = null;
-
-    /**
      * @var HmacHashGenerator
      */
     protected $hmacHashGenerator;
@@ -45,6 +40,16 @@ abstract class DirectRequest extends Request
      * @var string|null
      */
     protected $archiveReference = null;
+
+    /**
+     * The masked fields in database
+     *
+     * @var array
+     */
+    protected $masked = [
+        DirectQuestionField::CARD_OR_WALLET_NUMBER,
+        DirectQuestionField::CARD_CONTROL_NUMBER,
+    ];
 
 
     /**
@@ -113,7 +118,12 @@ abstract class DirectRequest extends Request
         $parameters = $parameters ?: $this->getParameters();
         $responseClass = $this->getResponseClass();
 
-        return new $responseClass($this->client->request($this->getUrl(), $parameters));
+        /** @var \Bnb\PayboxGateway\Responses\PayboxDirect\Response $response */
+        $response = new $responseClass($this->client->request($this->getUrl(), $parameters));
+
+        Response::create(array_change_key_case($response->getFields(), CASE_LOWER));
+
+        return $response;
     }
 
 
@@ -125,13 +135,12 @@ abstract class DirectRequest extends Request
     public function getDefaultParameters()
     {
         $params = [
-            'HASH' => 'SHA512',
-            'VERSION' => '00104',
-            'TYPE' => $this->getQuestionType(),
-            'SITE' => $this->config->get('paybox.site'),
-            'RANG' => $this->config->get('paybox.rank'),
-            'NUMQUESTION' => $this->numRequest,
-            'DATEQ' => $this->getFormattedDate($this->time ?: Carbon::now()),
+            DirectQuestionField::HASH => 'SHA512',
+            DirectQuestionField::PAYBOX_VERSION => '00104',
+            DirectQuestionField::PAYBOX_TYPE => $this->getQuestionType(),
+            DirectQuestionField::PAYBOX_SITE => $this->config->get('paybox.site'),
+            DirectQuestionField::PAYBOX_RANK => $this->config->get('paybox.rank'),
+            DirectQuestionField::PAYBOX_QUESTION_DATE => $this->getFormattedDate($this->time ?: Carbon::now()),
         ];
 
         if ( ! empty($this->archiveReference)) {
@@ -151,33 +160,21 @@ abstract class DirectRequest extends Request
     {
         $params = $this->getDefaultParameters() + $this->getBasicParameters();
 
-        $params['HMAC'] = $this->hmacHashGenerator->get($params);
+        foreach ($this->masked as $field) {
+            $this->storeMaskedField($field, $params, $originals);
+        }
+
+        $question = Question::create(array_change_key_case($params, CASE_LOWER));
+        $params = array_change_key_case($question->toArray(),CASE_UPPER);
+
+        foreach ($this->masked as $field) {
+            $this->restoreMaskedField($field, $params, $originals);
+        }
+
+        $params[DirectQuestionField::PAYBOX_QUESTION_NUMBER] = $question->numquestion;
+        $params[DirectQuestionField::HMAC] = $this->hmacHashGenerator->get($params);
 
         return $params;
-    }
-
-
-    /**
-     * Set request number in current day.
-     *
-     * @param $dayRequestNumber
-     *
-     * @return $this
-     * @throws Exception
-     */
-    public function setDayRequestNumber($dayRequestNumber)
-    {
-        if ( ! is_int($dayRequestNumber)) {
-            throw new Exception('Number of request should be integer');
-        }
-
-        if ($dayRequestNumber < 1 || $dayRequestNumber > 2147483647) {
-            throw new Exception(('Number of request should in range <1,2147483647>'));
-        }
-
-        $this->numRequest = str_pad($dayRequestNumber, 10, '0', STR_PAD_LEFT);
-
-        return $this;
     }
 
 
@@ -215,4 +212,24 @@ abstract class DirectRequest extends Request
      * @var string
      */
     public abstract function getResponseClass();
+
+
+    /*
+     * Internal helpers
+     */
+
+    private function storeMaskedField($key, $params, &$originals)
+    {
+        if ( ! empty($params[$key])) {
+            $originals[$key] = $params[$key];
+        }
+    }
+
+
+    private function restoreMaskedField($key, &$params, $originals)
+    {
+        if ( ! empty($originals[$key])) {
+            $params[$key] = $originals[$key];
+        }
+    }
 }

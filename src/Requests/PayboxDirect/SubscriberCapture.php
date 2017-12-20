@@ -2,6 +2,7 @@
 
 namespace Bnb\PayboxGateway\Requests\PayboxDirect;
 
+use Bnb\PayboxGateway\DirectQuestionField;
 use Bnb\PayboxGateway\QuestionTypeCode;
 use Bnb\PayboxGateway\Responses\PayboxDirect\SubscriberCapture as SubscriberCaptureResponse;
 
@@ -59,12 +60,12 @@ class SubscriberCapture extends SubscriberRequest
     public function getBasicParameters()
     {
         return [
-            'MONTANT' => $this->amount,
-            'DEVISE' => $this->currencyCode,
-            'REFERENCE' => $this->paymentNumber,
-            'NUMAPPEL' => $this->payboxCallNumber,
-            'NUMTRANS' => $this->payboxTransactionNumber,
-            'REFABONNE' => $this->subscriberNumber,
+            DirectQuestionField::AMOUNT => $this->amount,
+            DirectQuestionField::CURRENCY => $this->currencyCode,
+            DirectQuestionField::REFERENCE => $this->paymentNumber,
+            DirectQuestionField::PAYBOX_CALL_NUMBER => $this->payboxCallNumber,
+            DirectQuestionField::PAYBOX_TRANSACTION_NUMBER => $this->payboxTransactionNumber,
+            DirectQuestionField::SUBSCRIBER_NUMBER => $this->subscriberNumber,
         ];
     }
 

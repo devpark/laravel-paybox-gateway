@@ -2,6 +2,7 @@
 
 namespace Bnb\PayboxGateway\Requests\PayboxDirect;
 
+use Bnb\PayboxGateway\DirectQuestionField;
 use Bnb\PayboxGateway\QuestionTypeCode;
 use Bnb\PayboxGateway\Responses\PayboxDirect\Refund as RefundResponse;
 
@@ -61,10 +62,10 @@ class Refund extends DirectRequest
     public function getBasicParameters()
     {
         return [
-            'MONTANT' => $this->amount,
-            'DEVISE' => $this->currencyCode,
-            'NUMAPPEL' => $this->payboxCallNumber,
-            'NUMTRANS' => $this->payboxTransactionNumber,
+            DirectQuestionField::AMOUNT => $this->amount,
+            DirectQuestionField::CURRENCY => $this->currencyCode,
+            DirectQuestionField::PAYBOX_CALL_NUMBER => $this->payboxCallNumber,
+            DirectQuestionField::PAYBOX_TRANSACTION_NUMBER => $this->payboxTransactionNumber,
         ];
     }
 

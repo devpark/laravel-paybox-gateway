@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 
 class PayboxServiceProvider extends ServiceProvider
 {
+
     /**
      * Register service provider.
      */
@@ -13,6 +14,9 @@ class PayboxServiceProvider extends ServiceProvider
     {
         // merge module config if it's not published or some entries are missing 
         $this->mergeConfigFrom($this->configFile(), 'paybox');
+
+        // run migrations
+        $this->loadMigrationsFrom(__DIR__ . '/../../migrations');
 
         // publish configuration file
         $this->publishes([
@@ -24,6 +28,7 @@ class PayboxServiceProvider extends ServiceProvider
                 . 'resources' . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR . 'paybox',
         ], 'views');
     }
+
 
     /**
      * Get module config file.

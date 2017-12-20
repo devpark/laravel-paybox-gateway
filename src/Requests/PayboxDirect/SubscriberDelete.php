@@ -2,6 +2,7 @@
 
 namespace Bnb\PayboxGateway\Requests\PayboxDirect;
 
+use Bnb\PayboxGateway\DirectQuestionField;
 use Bnb\PayboxGateway\QuestionTypeCode;
 use Bnb\PayboxGateway\Responses\PayboxDirect\SubscriberDelete as SubscriberDeleteResponse;
 
@@ -16,8 +17,8 @@ class SubscriberDelete extends SubscriberRequest
     public function getBasicParameters()
     {
         return [
-            'REFABONNE' => $this->subscriberNumber,
-            'PORTEUR' => $this->subscriberWallet,
+            DirectQuestionField::SUBSCRIBER_NUMBER => $this->subscriberNumber,
+            DirectQuestionField::CARD_OR_WALLET_NUMBER => $this->subscriberWallet,
         ];
     }
 
