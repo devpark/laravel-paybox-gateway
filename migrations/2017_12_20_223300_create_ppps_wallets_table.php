@@ -16,10 +16,10 @@ class CreatePppsWalletsTable extends Migration
     {
         Schema::create('ppps_wallets', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('paybox_id', 64)->index();
-            $table->string('customer_id', 64)->index();
-            $table->timestamp('card_expiration_date');
-            $table->string('card_number', 32);
+            $table->string('subscriber_id', 191)->index();
+            $table->string('card_number', 19);
+            $table->timestamp('card_expiration_date')->nullable();
+            $table->string('paybox_id', 19)->nullable();
             $table->timestamps();
         });
     }

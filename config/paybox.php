@@ -33,6 +33,12 @@ return [
     'public_key' => storage_path('paybox/pubkey.pem'),
 
     /*
+     * Application Prefix for REFABONNE field.
+     * Prepended to wallet_id
+     */
+    'wallet_prefix' => env('PAYBOX_WALLET_PREFIX', 'WALLET_'),
+
+    /*
      * Default return fields when going back from Paybox. You can change here keys as you want,
      * you can add also more values from ResponseField class     
      */

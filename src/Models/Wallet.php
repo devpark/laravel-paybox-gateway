@@ -1,10 +1,4 @@
 <?php
-/**
- * laravel
- *
- * @author    Jérémy GAULIN <jeremy@bnb.re>
- * @copyright 2017 - B&B Web Expertise
- */
 
 namespace Bnb\PayboxGateway\Models;
 
@@ -14,11 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Wallet
  *
- * @property int id
+ * @property int    id
  * @property string paybox_id
- * @property string customer_id
- * @property string card_expiration_date
+ * @property string subscriber_id
  * @property string card_number
+ * @property Carbon card_expiration_date
  * @property Carbon created_at
  * @property Carbon updated_at
  *
@@ -29,14 +23,30 @@ class Wallet extends Model
 
     protected $table = 'ppps_wallets';
 
+    protected $dates = ['card_expiration_date'];
+
+    protected $fillable = [
+        'paybox_id',
+        'subscriber_id',
+        'card_number',
+        'card_expiration_date',
+    ];
+
 
     /**
-     * Relationship: model
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     * @param string $value
      */
-    public function model()
+    public function setCardNumberAttribute($value)
     {
-        return $this->morphTo();
+        $this->attributes['card_number'] = Question::maskCardNumber($value);
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getPayboxSubscriberNumber()
+    {
+        return sprintf('WALLET_%1$010d', $this->id);
     }
 }

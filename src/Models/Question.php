@@ -1,10 +1,4 @@
 <?php
-/**
- * laravel
- *
- * @author    Jérémy GAULIN <jeremy@bnb.re>
- * @copyright 2017 - B&B Web Expertise
- */
 
 namespace Bnb\PayboxGateway\Models;
 
@@ -32,6 +26,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string numappel
  * @property string numtrans
  * @property string hash
+ * @property int    wallet_id
  * @property Carbon created_at
  * @property Carbon updated_at
  *
@@ -59,6 +54,7 @@ class Question extends Model
         'numappel',
         'numtrans',
         'hash',
+        'wallet_id',
     ];
 
 
@@ -80,10 +76,32 @@ class Question extends Model
 
     /**
      * @param string $value
+     *
+     * @return string
+     */
+    private static function maskCardControlNumber($value)
+    {
+        return preg_replace('/./', 'X', $value);
+    }
+
+
+    /**
+     * @param string $value
+     *
+     * @return string
+     */
+    public static function maskCardNumber($value)
+    {
+        return preg_match('/^[0-9]{16}$/', $value) ? (str_repeat('X', 12) . substr($value, -4)) : $value;
+    }
+
+
+    /**
+     * @param string $value
      */
     public function setPorteurAttribute($value)
     {
-        $this->attributes['porteur'] = preg_match('/^[0-9]{16}$/', $value) ? (str_repeat('X', 12) . substr($value, -4)) : $value;
+        $this->attributes['porteur'] = self::maskCardNumber($value);
     }
 
 
@@ -92,7 +110,7 @@ class Question extends Model
      */
     public function setCvvAttribute($value)
     {
-        $this->attributes['cvv'] = preg_replace('/./', 'X', $value);
+        $this->attributes['cvv'] = self::maskCardControlNumber($value);
     }
 
 

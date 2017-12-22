@@ -1,10 +1,4 @@
 <?php
-/**
- * laravel
- *
- * @author    Jérémy GAULIN <jeremy@bnb.re>
- * @copyright 2017 - B&B Web Expertise
- */
 
 namespace Bnb\PayboxGateway\Models;
 
@@ -14,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Response
  *
- * @property int id
+ * @property int    id
  * @property string numquestion
  * @property string site
  * @property string rang
@@ -30,8 +24,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property string commentaire
  * @property string status
  * @property string sha
+ * @property int    wallet_id
  * @property Carbon created_at
  * @property Carbon updated_at
+ * @property Wallet wallet
  *
  * @package Bnb\PayboxGateway\Models
  */
@@ -56,5 +52,12 @@ class Response extends Model
         'commentaire',
         'status',
         'sha',
+        'wallet_id',
     ];
+
+
+    public function wallet()
+    {
+        return $this->belongsTo(Wallet::class, 'wallet_id', 'id');
+    }
 }

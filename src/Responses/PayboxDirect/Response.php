@@ -22,6 +22,11 @@ abstract class Response
      */
     protected $fields = [];
 
+    /***
+     * @var \Bnb\PayboxGateway\Models\Response
+     */
+    protected $model;
+
 
     /**
      * Capture constructor.
@@ -89,6 +94,39 @@ abstract class Response
     public function getResponseCode()
     {
         return $this->fields[DirectResponseField::RESPONSE_CODE];
+    }
+
+
+    /**
+     * Get Paybox response comment.
+     *
+     * @return string
+     */
+    public function getComment()
+    {
+        return $this->fields[DirectResponseField::COMMENT];
+    }
+
+
+    /**
+     * @return \Bnb\PayboxGateway\Models\Response
+     */
+    public function getModel()
+    {
+        return $this->model;
+    }
+
+
+    /**
+     * @param \Bnb\PayboxGateway\Models\Response $model
+     *
+     * @return $this
+     */
+    public function setModel(\Bnb\PayboxGateway\Models\Response $model)
+    {
+        $this->model = $model;
+
+        return $this;
     }
 
 

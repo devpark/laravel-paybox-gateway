@@ -92,7 +92,7 @@ abstract class DirectRequest extends Request
 
 
     /**
-     * Set the archive reference transmitted to the bank (may be printed on bank statement)
+     * Set the archive reference transmitted to the bank (should be unique between 1 and 12 chars)
      *
      * @param string $archiveReference
      *
@@ -111,7 +111,7 @@ abstract class DirectRequest extends Request
      *
      * @param array $parameters
      *
-     * @return $this
+     * @return \Bnb\PayboxGateway\Responses\PayboxDirect\Response
      */
     public function send(array $parameters = [])
     {
@@ -120,8 +120,7 @@ abstract class DirectRequest extends Request
 
         /** @var \Bnb\PayboxGateway\Responses\PayboxDirect\Response $response */
         $response = new $responseClass($this->client->request($this->getUrl(), $parameters));
-
-        Response::create(array_change_key_case($response->getFields(), CASE_LOWER));
+        $response->setModel(Response::create($this->buildResponseAttributes($response->getFields())));
 
         return $response;
     }
@@ -164,8 +163,8 @@ abstract class DirectRequest extends Request
             $this->storeMaskedField($field, $params, $originals);
         }
 
-        $question = Question::create(array_change_key_case($params, CASE_LOWER));
-        $params = array_change_key_case($question->toArray(),CASE_UPPER);
+        $question = Question::create($this->buildQuestionAttributes($params));
+        $params = array_change_key_case($question->toArray(), CASE_UPPER);
 
         foreach ($this->masked as $field) {
             $this->restoreMaskedField($field, $params, $originals);
@@ -188,6 +187,28 @@ abstract class DirectRequest extends Request
     protected function getFormattedDate(Carbon $date)
     {
         return $date->format('dmYHis');
+    }
+
+
+    /**
+     * @param array $params
+     *
+     * @return array
+     */
+    protected function buildQuestionAttributes(array $params)
+    {
+        return array_change_key_case($params, CASE_LOWER);
+    }
+
+
+    /**
+     * @param array $params
+     *
+     * @return array
+     */
+    protected function buildResponseAttributes(array $params)
+    {
+        return array_change_key_case($params, CASE_LOWER);
     }
 
 

@@ -16,23 +16,24 @@ class CreatePppsQuestionsTable extends Migration
     {
         Schema::create('ppps_questions', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('numquestion', 32)->nullable()->index();
-            $table->string('version', 16);
-            $table->string('hash', 16);
-            $table->string('type', 16);
-            $table->string('site', 32);
-            $table->string('rang', 16);
-            $table->string('dateq', 32);
-            $table->string('activite', 32)->nullable();
-            $table->string('reference', 64)->nullable();
-            $table->string('refabonne', 64)->nullable();
-            $table->string('montant', 32)->nullable();
-            $table->string('devise', 12)->nullable();
-            $table->string('porteur', 64)->nullable();
+            $table->string('numquestion', 10)->nullable()->index();
+            $table->string('version', 5);
+            $table->string('hash', 40);
+            $table->string('type', 5);
+            $table->string('site', 7);
+            $table->string('rang', 3);
+            $table->string('dateq', 14);
+            $table->string('activite', 3)->nullable();
+            $table->string('reference', 250)->nullable();
+            $table->string('refabonne', 250)->nullable();
+            $table->string('montant', 10)->nullable();
+            $table->string('devise', 3)->nullable();
+            $table->string('porteur', 19)->nullable();
             $table->string('dateval', 4)->nullable();
-            $table->string('cvv', 16)->nullable();
-            $table->string('numappel', 32)->nullable();
-            $table->string('numtrans', 32)->nullable();
+            $table->string('cvv', 4)->nullable();
+            $table->string('numappel', 10)->nullable();
+            $table->string('numtrans', 10)->nullable();
+            $table->unsignedInteger('wallet_id')->index()->nullable();
             $table->timestamps();
         });
     }
