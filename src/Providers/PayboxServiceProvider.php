@@ -16,7 +16,14 @@ class PayboxServiceProvider extends ServiceProvider
         $this->mergeConfigFrom($this->configFile(), 'paybox');
 
         // run migrations
-        $this->loadMigrationsFrom(__DIR__ . '/../../migrations');
+        if ( ! method_exists($this, 'loadMigrationsFrom')) {
+            $this->publishes([
+                realpath(__DIR__ . '/../../migrations') => $this->app['path.base'] . DIRECTORY_SEPARATOR
+                    . 'database' . DIRECTORY_SEPARATOR . 'migrations',
+            ], 'migrations');
+        } else {
+            $this->loadMigrationsFrom(__DIR__ . '/../../migrations');
+        }
 
         // publish configuration file
         $this->publishes([

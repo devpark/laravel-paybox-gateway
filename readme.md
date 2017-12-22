@@ -23,16 +23,28 @@ This module makes integration with **[Paybox](http://www1.paybox.com/?lang=en)**
    ```
         
    in section `providers`
-          
-3. In case you need advanced customization, run
 
-    ```php
+   You also need to publish the migrations :
+
+   ```bash
+       php artisan vendor:publish --provider="Bnb\PayboxGateway\Providers\PayboxServiceProvider" --tag=migrations
+   ```
+
+3. Run the migrations
+
+   ```bash
+       php artisan migrate
+   ```
+
+4. In case you need advanced customization, run
+
+    ```bash
     php artisan vendor:publish --provider="Bnb\PayboxGateway\Providers\PayboxServiceProvider"
     ```
     
     in your console to publish default configuration files and sample views
         
-4. Open `config/paybox.php` and configure it according to your needs. By default you should put the following variables into your `.env` file and fill them with valid values:
+5. Open `config/paybox.php` and configure it according to your needs. By default you should put the following variables into your `.env` file and fill them with valid values:
  
  * `PAYBOX_TEST` - whether Paybox test system should be used (it should be set to `true` only for tests) , 
  * `PAYBOX_SITE` - Site number provided by Paybox
@@ -41,9 +53,9 @@ This module makes integration with **[Paybox](http://www1.paybox.com/?lang=en)**
  * `PAYBOX_BACK_OFFICE_PASSWORD` - Paybox back-office password. It's required only if you are going to make `Capture` requests. Otherwise it's not recommended to fill it (it won't be used)
  * `PAYBOX_HMAC_KEY` - This is key you should generate in your Paybox back-office 
   
-5. Download [Paybox public key](http://www1.paybox.com/espace-integrateur-documentation/manuels/?lang=en) and put it in directory and name you specified in `config/paybox.php` for `public_key` key
+6. Download [Paybox public key](http://www1.paybox.com/espace-integrateur-documentation/manuels/?lang=en) and put it in directory and name you specified in `config/paybox.php` for `public_key` key
      
-6. In your routes file register routes with names defined in `customer_return_routes_names` and `transaction_verify_route_name` groups of your `config/paybox.php`
+7. In your routes file register routes with names defined in `customer_return_routes_names` and `transaction_verify_route_name` groups of your `config/paybox.php`
 
 ### Usage
 
