@@ -3,7 +3,7 @@
   "description": "Laravel Paybox gateway",
   "require": {
     "laravel/framework": "5.*",
-    "guzzlehttp/guzzle": "^5.3|^6.2",
+    "guzzlehttp/guzzle": ">=5.3",
     "ext-openssl": "*",
     "ext-iconv": "*"
   },
