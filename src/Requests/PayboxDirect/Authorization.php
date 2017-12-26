@@ -56,7 +56,7 @@ class Authorization extends DirectRequest
      */
     public function setCardExpirationDate(Carbon $cardExpirationDate)
     {
-        $this->cardExpirationDate = $cardExpirationDate->format('dy');
+        $this->cardExpirationDate = $cardExpirationDate->format('my');
 
         return $this;
     }
