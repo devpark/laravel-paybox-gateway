@@ -330,7 +330,7 @@ class PayboxDirect
 
         $subscriberNumber = self::validateSubscriberNumber($subscriberNumber);
 
-        return Wallet::where('subscriber_id', '=', $subscriberNumber)->all();
+        return Wallet::where('subscriber_id', '=', $subscriberNumber)->get();
     }
 
 
