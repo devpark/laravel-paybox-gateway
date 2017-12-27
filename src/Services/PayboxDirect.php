@@ -28,6 +28,7 @@ use Bnb\PayboxGateway\Services\Exceptions\InvalidSubscriberNumberException;
 use Bnb\PayboxGateway\Services\Exceptions\InvalidTransactionNumberException;
 use Bnb\PayboxGateway\Services\Exceptions\InvalidWalletException;
 use Bnb\PayboxGateway\Services\Exceptions\OperationFailedException;
+use Bnb\PayboxGateway\Services\Exceptions\WalletHasExpiredException;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Collection;
@@ -237,6 +238,7 @@ class PayboxDirect
      * @throws InvalidCardControlNumberException
      * @throws InvalidReferenceException
      * @throws InvalidWalletException
+     * @throws WalletHasExpiredException
      */
     public static function debitWallet(
         $amount,
@@ -254,6 +256,10 @@ class PayboxDirect
 
         if (empty($wallet)) {
             throw new InvalidWalletException();
+        }
+
+        if ($wallet->hasExpired()) {
+            throw new WalletHasExpiredException();
         }
 
         /** @var SubscriberAuthorizationWithCapture $request */
@@ -390,9 +396,9 @@ class PayboxDirect
      */
     private static function validateCardExpirationDate(Carbon $cardExpirationDate)
     {
-        $cardExpirationDate = $cardExpirationDate->firstOfMonth()->startOfDay();
+        $cardExpirationDate = $cardExpirationDate->lastOfMonth()->endOfDay();
 
-        if ($cardExpirationDate->lt(Carbon::now()->firstOfMonth())) {
+        if ($cardExpirationDate->lt(Carbon::now())) {
             throw new InvalidCardExpirationDateException();
         }
 

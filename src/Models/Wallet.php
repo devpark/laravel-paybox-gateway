@@ -49,4 +49,13 @@ class Wallet extends Model
     {
         return sprintf('WALLET_%1$010d', $this->id);
     }
+
+
+    /**
+     * @return bool
+     */
+    public function hasExpired()
+    {
+        return $this->card_expiration_date->lte(Carbon::now());
+    }
 }
