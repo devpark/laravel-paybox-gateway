@@ -92,7 +92,9 @@ class Question extends Model
      */
     public static function maskCardNumber($value)
     {
-        return preg_match('/^[0-9]{16}$/', $value) ? (str_repeat('X', 12) . substr($value, -4)) : $value;
+        return preg_match('/^[0-9]{16}$/', $value) ?
+            (substr($value, 0, 4) . str_repeat('X', 8) . substr($value, -4))
+            : $value;
     }
 
 
