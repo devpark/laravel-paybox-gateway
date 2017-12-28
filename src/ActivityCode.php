@@ -12,6 +12,6 @@ class ActivityCode
     const UNSPECIFIED = '020';
     const PHONE_REQUEST = '021';
     const LETTER_REQUEST = '022';
-    const INTERNET_REQUEST = '023';
-    const RECURRING_PAYMENT = '024';
+    const INTERNET_REQUEST = '024';
+    const RECURRING_PAYMENT = '027';
 }
