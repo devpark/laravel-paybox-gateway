@@ -2,10 +2,10 @@
   "name": "bnbwebexpertise/laravel-paybox-gateway",
   "description": "Laravel Paybox gateway",
   "require": {
-    "laravel/framework": "5.*",
-    "guzzlehttp/guzzle": ">=5.3",
-    "ext-openssl": "*",
-    "ext-iconv": "*"
+    "php": ">=5.5",
+    "laravel/framework": "5.1.*|5.2.*|5.3.*|5.4.*|>=5.5",
+    "lib-openssl": "*",
+    "guzzlehttp/guzzle": ">=5.3"
   },
   "autoload": {
     "psr-4": {
