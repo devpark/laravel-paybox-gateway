@@ -66,6 +66,10 @@ return [
         'retry_after' => (int)env('PAYBOX_NOTIFICATIONS_RETRY_AFTER', 60),
         'url' => env('PAYBOX_NOTIFICATIONS_URL'),
         'notify_to' => env('PAYBOX_NOTIFICATIONS_NOTIFY_TO'),
+        'notify_from' => [
+            'address' => env('PAYBOX_NOTIFICATIONS_NOTIFY_FROM_ADDRESS'),
+            'name' => env('PAYBOX_NOTIFICATIONS_NOTIFY_FROM_NAME'),
+        ],
     ],
 
     /*
