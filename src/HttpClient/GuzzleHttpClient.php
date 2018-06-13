@@ -3,6 +3,7 @@
 namespace Bnb\PayboxGateway\HttpClient;
 
 use GuzzleHttp\Client;
+use Psr\Http\Message\ResponseInterface;
 
 class GuzzleHttpClient
 {
@@ -25,8 +26,24 @@ class GuzzleHttpClient
      * @param array  $parameters
      *
      * @return string
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function request($url, array $parameters)
+    {
+        return (string)$this->requestRaw($url, $parameters)->getBody();
+    }
+
+
+    /**
+     * Make POST Http request to given url.
+     *
+     * @param string $url
+     * @param array  $parameters
+     *
+     * @return ResponseInterface
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function requestRaw($url, array $parameters)
     {
         if (method_exists($this->client, 'request')) {
             $response = $this->client->request('POST', $url, [
@@ -38,6 +55,6 @@ class GuzzleHttpClient
             ]);
         }
 
-        return (string)$response->getBody();
+        return $response;
     }
 }

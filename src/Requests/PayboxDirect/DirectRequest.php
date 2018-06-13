@@ -4,13 +4,18 @@ namespace Bnb\PayboxGateway\Requests\PayboxDirect;
 
 use Bnb\PayboxGateway\DirectQuestionField;
 use Bnb\PayboxGateway\HttpClient\GuzzleHttpClient;
+use Bnb\PayboxGateway\Jobs\NotifyPaymentStatus;
+use Bnb\PayboxGateway\Models\Notification;
 use Bnb\PayboxGateway\Models\Question;
 use Bnb\PayboxGateway\Models\Response;
+use Bnb\PayboxGateway\QuestionTypeCode;
 use Bnb\PayboxGateway\Requests\Request;
+use Bnb\PayboxGateway\ResponseCode;
 use Bnb\PayboxGateway\Services\Amount;
 use Bnb\PayboxGateway\Services\HmacHashGenerator;
 use Bnb\PayboxGateway\Services\ServerSelector;
 use Carbon\Carbon;
+use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Config\Repository as Config;
 
 abstract class DirectRequest extends Request
@@ -121,6 +126,31 @@ abstract class DirectRequest extends Request
         /** @var \Bnb\PayboxGateway\Responses\PayboxDirect\Response $response */
         $response = new $responseClass($this->client->request($this->getUrl(), $parameters));
         $response->setModel(Response::create($this->buildResponseAttributes($response->getFields())));
+
+        $requestsWithNotifications = [
+            QuestionTypeCode::CAPTURE_ONLY,
+            QuestionTypeCode::AUTHORIZATION_WITH_CAPTURE,
+            QuestionTypeCode::SUBSCRIBER_CAPTURE_ONLY,
+            QuestionTypeCode::SUBSCRIBER_AUTHORIZATION_WITH_CAPTURE,
+        ];
+
+        if (in_array($this->getQuestionType(), $requestsWithNotifications)
+            && $response->getModel()->codereponse === ResponseCode::SUCCESS) {
+            $reference = ! empty($parameters[DirectQuestionField::REFERENCE]) ? $parameters[DirectQuestionField::REFERENCE] : false;
+            $amount = round($this->amount / 100, 2);
+
+            if (config('paybox.notifications.enabled') && $reference) {
+                /** @var Dispatcher $dispatcher */
+                $dispatcher = app(Dispatcher::class);
+                $job = new NotifyPaymentStatus(Notification::createFromResponse($response->getModel(), $reference, $amount));
+
+                if (config('paybox.notifications.queue') !== false) {
+                    $dispatcher->dispatch($job);
+                } else {
+                    $dispatcher->dispatchNow($job);
+                }
+            }
+        }
 
         return $response;
     }

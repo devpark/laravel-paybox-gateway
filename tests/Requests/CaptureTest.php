@@ -15,11 +15,17 @@ use Tests\UnitTestCase;
 
 class CaptureTest extends UnitTestCase
 {
+
     protected $serverSelector;
+
     protected $config;
+
     protected $request;
+
     protected $amountService;
+
     protected $client;
+
 
     public function setUp()
     {
@@ -37,6 +43,7 @@ class CaptureTest extends UnitTestCase
             ])->makePartial()
             ->shouldAllowMockingProtectedMethods();
     }
+
 
     /** @test */
     public function getParameters_it_returns_valid_parameters()
@@ -58,13 +65,14 @@ class CaptureTest extends UnitTestCase
         $this->assertSame('00002', $parameters['TYPE']);
         $this->assertSame($now->format('dmYHis'), $parameters['DATEQ']);
         $this->assertSame(null, $parameters['NUMQUESTION']);
-        $this->assertSame($backOfficePassword, $parameters['CLE']);
+        $this->assertSame(null, $parameters['CLE']);
         $this->assertSame(null, $parameters['MONTANT']);
         $this->assertSame(null, $parameters['DEVISE']);
         $this->assertSame(null, $parameters['REFERENCE']);
         $this->assertSame(null, $parameters['NUMAPPEL']);
         $this->assertSame(null, $parameters['NUMTRANS']);
     }
+
 
     /** @test */
     public function setAmount_it_gets_valid_amount_and_currency_when_both_given()
@@ -78,6 +86,7 @@ class CaptureTest extends UnitTestCase
         $this->assertSame(Currency::CHF, $parameters['DEVISE']);
     }
 
+
     /** @test */
     public function setAmount_it_gets_valid_amount_and_currency_when_no_currency()
     {
@@ -90,6 +99,7 @@ class CaptureTest extends UnitTestCase
         $this->assertSame(Currency::EUR, $parameters['DEVISE']);
     }
 
+
     /** @test */
     public function setTime_it_gets_valid_date_time_when_set()
     {
@@ -99,6 +109,7 @@ class CaptureTest extends UnitTestCase
         $parameters = $this->request->getParameters();
         $this->assertSame($date->format('dmYHis'), $parameters['DATEQ']);
     }
+
 
     /** @test */
     public function setDayRequestNumber_it_throws_exception_when_number_is_not_integer()
@@ -110,6 +121,7 @@ class CaptureTest extends UnitTestCase
         $this->request->setDayRequestNumber('123');
     }
 
+
     /** @test */
     public function setDayRequestNumber_it_throws_exception_when_number_is_too_low()
     {
@@ -119,6 +131,7 @@ class CaptureTest extends UnitTestCase
         $this->expectExceptionMessage('umber of request should in range <1,2147483647>');
         $this->request->setDayRequestNumber(0);
     }
+
 
     /** @test */
     public function setDayRequestNumber_it_throws_exception_when_number_is_too_high()
@@ -130,6 +143,7 @@ class CaptureTest extends UnitTestCase
         $this->request->setDayRequestNumber(2147483647 + 1);
     }
 
+
     /** @test */
     public function setDayRequestNumber_it_sets_valid_request_number()
     {
@@ -138,6 +152,7 @@ class CaptureTest extends UnitTestCase
         $parameters = $this->request->getParameters();
         $this->assertSame('0000051234', $parameters['NUMQUESTION']);
     }
+
 
     /** @test */
     public function getUrl_it_fires_server_selector_once()
@@ -155,6 +170,7 @@ class CaptureTest extends UnitTestCase
         $this->assertSame($validUrl, $url);
     }
 
+
     /** @test */
     public function setPaymentNumber_it_gets_valid_payment_number()
     {
@@ -163,6 +179,7 @@ class CaptureTest extends UnitTestCase
         $parameters = $this->request->getParameters();
         $this->assertSame(123, $parameters['REFERENCE']);
     }
+
 
     /** @test */
     public function send_it_sends_request_and_return_response_when_no_parameters_given()
@@ -185,6 +202,7 @@ class CaptureTest extends UnitTestCase
         $this->assertSame($responseBody, $response->getBody());
     }
 
+
     /** @test */
     public function send_it_sends_request_and_return_response_when_parameters_given()
     {
@@ -205,6 +223,7 @@ class CaptureTest extends UnitTestCase
         $this->assertSame($responseBody, $response->getBody());
     }
 
+
     /** @test */
     public function setPayboxCallNumber_it_gets_valid_paybox_call_number()
     {
@@ -214,6 +233,7 @@ class CaptureTest extends UnitTestCase
         $this->assertSame(671234, $parameters['NUMAPPEL']);
     }
 
+
     /** @test */
     public function setPayboxTransactionNumber_it_gets_valid_paybox_transaction_number()
     {
@@ -222,6 +242,7 @@ class CaptureTest extends UnitTestCase
         $parameters = $this->request->getParameters();
         $this->assertSame(54123123, $parameters['NUMTRANS']);
     }
+
 
     /** @test */
     public function setUrlFrom_it_sets_valid_url_when_looking_for_matching_url()
@@ -238,6 +259,7 @@ class CaptureTest extends UnitTestCase
         $this->assertSame($finalUrl, $this->request->getUrl());
     }
 
+
     /** @test */
     public function setUrlFrom_it_sets_valid_url_when_looking_for_other_url()
     {
@@ -252,6 +274,7 @@ class CaptureTest extends UnitTestCase
         $this->request->setUrlFrom($authorizationUrl, true);
         $this->assertSame($finalUrl, $this->request->getUrl());
     }
+
 
     protected function ignoreMissingMethods()
     {

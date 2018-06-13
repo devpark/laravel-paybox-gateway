@@ -55,6 +55,20 @@ return [
     ],
 
     /*
+     * Notifications settings for server-to-server communication about Paybox Direct payments status
+     */
+    'notifications' => [
+        'enabled' => filter_var(env('PAYBOX_NOTIFICATIONS_ENABLED', true), FILTER_VALIDATE_BOOLEAN),
+        'queue' => [
+            'connection' => env('PAYBOX_NOTIFICATIONS_QUEUE_CONNECTION'),
+            'queue' => env('PAYBOX_NOTIFICATIONS_QUEUE_NAME'),
+        ],
+        'retry_after' => (int)env('PAYBOX_NOTIFICATIONS_RETRY_AFTER', 60),
+        'url' => env('PAYBOX_NOTIFICATIONS_URL'),
+        'notify_to' => env('PAYBOX_NOTIFICATIONS_NOTIFY_TO'),
+    ],
+
+    /*
      * Those are routes names (not urls) where customer will be redirected after payment. If you 
      * want to use custom route with params in url you should set them dynamically when creating
      * authorization data. You shouldn't change keys here. Those urls will be later launched using 
