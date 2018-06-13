@@ -134,12 +134,13 @@ abstract class DirectRequest extends Request
             QuestionTypeCode::SUBSCRIBER_AUTHORIZATION_WITH_CAPTURE,
         ];
 
-        if (in_array($this->getQuestionType(), $requestsWithNotifications)
+        if (config('paybox.notifications.enabled')
+            && in_array($this->getQuestionType(), $requestsWithNotifications)
             && $response->getModel()->codereponse === ResponseCode::SUCCESS) {
             $reference = ! empty($parameters[DirectQuestionField::REFERENCE]) ? $parameters[DirectQuestionField::REFERENCE] : false;
             $amount = round($this->amount / 100, 2);
 
-            if (config('paybox.notifications.enabled') && $reference) {
+            if ($reference) {
                 /** @var Dispatcher $dispatcher */
                 $dispatcher = app(Dispatcher::class);
                 $job = new NotifyPaymentStatus(Notification::createFromResponse($response->getModel(), $reference, $amount));
