@@ -4,11 +4,12 @@ namespace Tests\Providers;
 
 use Bnb\PayboxGateway\Providers\PayboxServiceProvider;
 use Illuminate\Foundation\Application;
-use Tests\UnitTestCase;
 use Mockery as m;
+use Tests\UnitTestCase;
 
 class PayboxServiceProviderTest extends UnitTestCase
 {
+
     /** @test */
     public function it_does_all_required_actions_when_registering()
     {
@@ -36,6 +37,8 @@ class PayboxServiceProviderTest extends UnitTestCase
             realpath(__DIR__ . '/../../views') => $basePath . DIRECTORY_SEPARATOR . 'resources' .
                 DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR . 'paybox',
         ], 'views');
+
+        $payboxProvider->shouldReceive('loadMigrationsFrom')->once();
 
         $payboxProvider->register();
     }

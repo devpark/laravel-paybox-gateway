@@ -6,6 +6,7 @@ use Bnb\PayboxGateway\Currency;
 use Bnb\PayboxGateway\HttpClient\GuzzleHttpClient;
 use Bnb\PayboxGateway\Responses\PayboxDirect\Capture as CaptureResponse;
 use Bnb\PayboxGateway\Services\Amount;
+use Bnb\PayboxGateway\Services\HmacHashGenerator;
 use Bnb\PayboxGateway\Services\ServerSelector;
 use Carbon\Carbon;
 use Exception;
@@ -32,12 +33,14 @@ class CaptureTest extends UnitTestCase
         parent::setUp();
         $this->serverSelector = m::mock(ServerSelector::class);
         $this->config = m::mock(Config::class);
+        $this->hash = m::mock(HmacHashGenerator::class);
         $this->amountService = m::mock(Amount::class);
         $this->client = m::mock(GuzzleHttpClient::class);
         $this->request = m::mock(\Bnb\PayboxGateway\Requests\PayboxDirect\Capture::class,
             [
                 $this->serverSelector,
                 $this->config,
+                $this->hash,
                 $this->amountService,
                 $this->client,
             ])->makePartial()
