@@ -19,7 +19,7 @@ class VerifyTest extends UnitTestCase
     protected $amountService;
     protected $verify;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->request = m::mock(Request::class);

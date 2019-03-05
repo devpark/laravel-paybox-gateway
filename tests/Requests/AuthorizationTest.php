@@ -12,7 +12,7 @@ class AuthorizationTest extends UnitTestCase
 {
     use AuthorizationHelper;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->setUpMocks();

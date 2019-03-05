@@ -27,7 +27,7 @@ class CaptureTest extends UnitTestCase
     protected $client;
 
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->serverSelector = m::mock(ServerSelector::class);
