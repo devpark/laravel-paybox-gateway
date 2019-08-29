@@ -31,6 +31,9 @@ class Authorization extends DirectRequest
      */
     protected $activity = ActivityCode::UNSPECIFIED;
 
+    /** @var array */
+    protected $_3DSecure = [];
+
 
     /**
      * Set card number provided by the customer.
@@ -95,13 +98,51 @@ class Authorization extends DirectRequest
 
 
     /**
+     * @param string $sID3D
+     * @param string $s3DCAVV
+     * @param string $s3DCAVVALGO
+     * @param string $s3DECI
+     * @param string $s3DENROLLED
+     * @param string $s3DERROR
+     * @param string $s3DSIGNVAL
+     * @param string $s3DSTATUS
+     * @param string $s3DXID
+     */
+    public function set3DSecure(
+        $sID3D,
+        $s3DCAVV = null,
+        $s3DCAVVALGO = null,
+        $s3DECI = null,
+        $s3DENROLLED = null,
+        $s3DERROR = null,
+        $s3DSIGNVAL = null,
+        $s3DSTATUS = null,
+        $s3DXID = null
+    ) {
+        $this->_3DSecure['ID3D'] = $sID3D;
+        $this->_3DSecure['3DCAVV'] = $s3DCAVV;
+        $this->_3DSecure['3DCAVVALGO'] = $s3DCAVVALGO;
+        $this->_3DSecure['3DECI'] = $s3DECI;
+        $this->_3DSecure['3DENROLLED'] = $s3DENROLLED;
+        $this->_3DSecure['3DERROR'] = $s3DERROR;
+        $this->_3DSecure['3DSIGNVAL'] = $s3DSIGNVAL;
+        $this->_3DSecure['3DSTATUS'] = $s3DSTATUS;
+        $this->_3DSecure['3DXID'] = $s3DXID;
+
+        $this->_3DSecure = array_filter($this->_3DSecure);
+
+        return $this;
+    }
+
+
+    /**
      * Get parameters that will be send to Paybox Direct.
      *
      * @return array
      */
     public function getBasicParameters()
     {
-        return [
+        $params = [
             DirectQuestionField::AMOUNT => $this->amount,
             DirectQuestionField::CURRENCY => $this->currencyCode,
             DirectQuestionField::REFERENCE => $this->paymentNumber,
@@ -110,6 +151,22 @@ class Authorization extends DirectRequest
             DirectQuestionField::CARD_CONTROL_NUMBER => $this->cardControlNumber,
             DirectQuestionField::ACTIVITY => $this->activity,
         ];
+
+        if ( ! empty($this->_3DSecure)) {
+            $params = $params + array_filter([
+                    DirectQuestionField::_3D_SECURE_ID3D => $this->_3DSecure['ID3D'] ?? null,
+                    DirectQuestionField::_3D_SECURE_3DCAVV => $this->_3DSecure['3DCAVV'] ?? null,
+                    DirectQuestionField::_3D_SECURE_3DCAVVALGO => $this->_3DSecure['3DCAVVALGO'] ?? null,
+                    DirectQuestionField::_3D_SECURE_3DECI => $this->_3DSecure['3DECI'] ?? null,
+                    DirectQuestionField::_3D_SECURE_3DENROLLED => $this->_3DSecure['3DENROLLED'] ?? null,
+                    DirectQuestionField::_3D_SECURE_3DERROR => $this->_3DSecure['3DERROR'] ?? null,
+                    DirectQuestionField::_3D_SECURE_3DSIGNVAL => $this->_3DSecure['3DSIGNVAL'] ?? null,
+                    DirectQuestionField::_3D_SECURE_3DSTATUS => $this->_3DSecure['3DSTATUS'] ?? null,
+                    DirectQuestionField::_3D_SECURE_3DXID => $this->_3DSecure['3DXID'] ?? null,
+                ]);
+        }
+
+        return $params;
     }
 
 

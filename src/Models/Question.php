@@ -25,6 +25,15 @@ use Illuminate\Database\Eloquent\Model;
  * @property string cvv
  * @property string numappel
  * @property string numtrans
+ * @property string id3d
+ * @property string 3dcavv
+ * @property string 3dcavvalgo
+ * @property string 3deci
+ * @property string 3denrolled
+ * @property string 3derror
+ * @property string 3dsignval
+ * @property string 3dstatus
+ * @property string 3dxid
  * @property string hash
  * @property int    wallet_id
  * @property Carbon created_at
@@ -53,6 +62,15 @@ class Question extends Model
         'cvv',
         'numappel',
         'numtrans',
+        'id3d',
+        '3dcavv',
+        '3dcavvalgo',
+        '3deci',
+        '3denrolled',
+        '3derror',
+        '3dsignval',
+        '3dstatus',
+        '3dxid',
         'hash',
         'wallet_id',
     ];
@@ -140,6 +158,15 @@ class Question extends Model
             'cvv',
             'numappel',
             'numtrans',
+            'id3d',
+            '3dcavv',
+            '3dcavvalgo',
+            '3deci',
+            '3denrolled',
+            '3derror',
+            '3dsignval',
+            '3dstatus',
+            '3dxid',
             'hash',
         ]);
     }

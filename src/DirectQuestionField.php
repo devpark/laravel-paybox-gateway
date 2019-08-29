@@ -28,4 +28,13 @@ class DirectQuestionField
     const PAYBOX_TRANSACTION_NUMBER = 'NUMTRANS';
     const SUBSCRIBER_NUMBER = 'REFABONNE';
     const HMAC = 'HMAC';
+    const _3D_SECURE_ID3D = 'ID3D';
+    const _3D_SECURE_3DCAVV = '3DCAVV';
+    const _3D_SECURE_3DCAVVALGO = '3DCAVVALGO';
+    const _3D_SECURE_3DECI = '3DECI';
+    const _3D_SECURE_3DENROLLED = '3DENROLLED';
+    const _3D_SECURE_3DERROR = '3DERROR';
+    const _3D_SECURE_3DSIGNVAL = '3DSIGNVAL';
+    const _3D_SECURE_3DSTATUS = '3DSTATUS';
+    const _3D_SECURE_3DXID = '3DXID';
 }

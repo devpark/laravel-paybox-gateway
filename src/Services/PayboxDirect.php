@@ -44,14 +44,23 @@ class PayboxDirect
      * @param string $cardControlNumber
      * @param string $reference
      * @param string $activity
+     * @param string $sID3D
+     * @param string $s3DCAVV
+     * @param string $s3DCAVVALGO
+     * @param string $s3DECI
+     * @param string $s3DENROLLED
+     * @param string $s3DERROR
+     * @param string $s3DSIGNVAL
+     * @param string $s3DSTATUS
+     * @param string $s3DXID
      *
      * @return Response
-     * @throws OperationFailedException
      * @throws InvalidAmountException
-     * @throws InvalidCardNumberException
-     * @throws InvalidCardExpirationDateException
      * @throws InvalidCardControlNumberException
+     * @throws InvalidCardExpirationDateException
+     * @throws InvalidCardNumberException
      * @throws InvalidReferenceException
+     * @throws OperationFailedException
      */
     public static function debit(
         $amount,
@@ -59,7 +68,16 @@ class PayboxDirect
         Carbon $cardExpirationDate,
         $cardControlNumber,
         $reference,
-        $activity = ActivityCode::INTERNET_REQUEST
+        $activity = ActivityCode::INTERNET_REQUEST,
+        $sID3D = null,
+        $s3DCAVV = null,
+        $s3DCAVVALGO = null,
+        $s3DECI = null,
+        $s3DENROLLED = null,
+        $s3DERROR = null,
+        $s3DSIGNVAL = null,
+        $s3DSTATUS = null,
+        $s3DXID = null
     ) {
 
         $amount = self::validateAmount($amount);
@@ -77,7 +95,9 @@ class PayboxDirect
             ->setCardControlNumber($cardControlNumber)
             ->setActivity($activity)
             ->setPaymentNumber($reference)
-            ->send();
+            ->set3DSecure($sID3D, $s3DCAVV, $s3DCAVVALGO, $s3DECI, $s3DENROLLED, $s3DERROR, $s3DSIGNVAL, $s3DSTATUS, $s3DXID)
+            ->send()
+        ;
 
         if ($response->isSuccess()) {
             return $response->getModel();
@@ -111,7 +131,8 @@ class PayboxDirect
             ->setAmount($amount)
             ->setPayboxCallNumber($callNumber)
             ->setPayboxTransactionNumber($transactionNumber)
-            ->send();
+            ->send()
+        ;
 
         if ($response->isSuccess()) {
             return $response->getModel();
@@ -175,7 +196,8 @@ class PayboxDirect
                 ->setCardControlNumber($cardControlNumber)
                 ->setActivity($activity)
                 ->setPaymentNumber($reference)
-                ->send();
+                ->send()
+            ;
         } catch (Exception $e) {
             if ( ! empty($wallet)) {
                 try {
@@ -202,7 +224,8 @@ class PayboxDirect
                     ->setPaymentNumber($reference)
                     ->setPayboxTransactionNumber($response->getTransactionNumber())
                     ->setPayboxCallNumber($response->getCallNumber())
-                    ->send();
+                    ->send()
+                ;
 
                 if ($response->isSuccess()) {
                     return $response->getModel();
@@ -272,7 +295,8 @@ class PayboxDirect
             ->setCardControlNumber($cardControlNumber)
             ->setActivity($activity)
             ->setPaymentNumber($reference)
-            ->send();
+            ->send()
+        ;
 
         if ($response->isSuccess()) {
             return $response->getModel();
@@ -303,7 +327,8 @@ class PayboxDirect
         /** @var SubscriberDeleteResponse $response */
         $response = $request
             ->setWallet($wallet)
-            ->send();
+            ->send()
+        ;
 
         if ($response->isSuccess()) {
             try {
