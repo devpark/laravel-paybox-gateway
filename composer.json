@@ -1,6 +1,6 @@
 {
-  "name": "devpark/laravel-paybox-gateway",
-  "description": "Laravel Paybox gateway",
+  "name": "flofgr/laravel-paybox-gateway",
+  "description": "Laravel 6+ Paybox gateway",
   "require": {
     "laravel/framework": "6.*",
     "guzzlehttp/guzzle": "^6.2",
