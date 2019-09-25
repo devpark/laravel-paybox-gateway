@@ -7,6 +7,12 @@ use Illuminate\Support\ServiceProvider;
 class PayboxServiceProvider extends ServiceProvider
 {
 
+    public function boot()
+    {
+        $this->loadTranslationsFrom(__DIR__ . '/../../translations', 'paybox');
+    }
+
+
     /**
      * Register service provider.
      */

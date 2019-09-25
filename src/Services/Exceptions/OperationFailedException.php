@@ -12,7 +12,7 @@ class OperationFailedException extends \Exception
 
     public function __construct($errorCode, $comment)
     {
-        parent::__construct(sprintf('The payment has failed : (%s) %s', $errorCode, $comment));
+        parent::__construct(trans('paybox::exceptions.operation_failed_exception', ['code' => $errorCode, 'message' => $comment]));
 
         $this->code = intval($errorCode);
         $this->errorCode = $errorCode;

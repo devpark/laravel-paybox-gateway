@@ -7,6 +7,6 @@ class InvalidCardNumberException extends \Exception
 
     public function __construct()
     {
-        parent::__construct('The provided card number is not valid.');
+        parent::__construct(trans('paybox::exceptions.invalid_card_number_exception'));
     }
 }
