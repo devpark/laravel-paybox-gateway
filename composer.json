@@ -2,7 +2,7 @@
   "name": "flofgr/laravel-paybox-gateway",
   "description": "Laravel 6+ Paybox gateway",
   "require": {
-    "laravel/framework": ">=5.8",
+    "laravel/framework": ">=6.*",
     "guzzlehttp/guzzle": "^6.2",
     "ext-openssl": "*",
     "ext-iconv": "*"
