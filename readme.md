@@ -1,13 +1,14 @@
 ## Laravel Paybox Gateway
 
 This module makes integration with **[Paybox](http://www1.paybox.com/?lang=en)** payment gateway much easier. It supports currently 2 ways of making payments using Paybox system.
+Ce module permet d'intégrer la solution de paiement Paybox facilement dans un projet Laravel 6. Deux méthodes de paiement sont supportés:
  
  1. **Full payment via Paybox System** - this is the most common way to receive payment - client has to pay for his order and after payment you can process the order
  2. **Authorization via Paybox System followed by capture via Paybox Direct** - first client makes payment but in fact the real payment is not made, payment is only authorized so far. In maximum period of 7 days you have to confirm you want to/are able to process the order and you capture the payment. After successful payment capture you can process the order.
 
 ### Installation
 
-1. Run
+1. Ajout via Composer
 
    ```php   
    composer require devpark/laravel-paybox-gateway
@@ -16,7 +17,7 @@ This module makes integration with **[Paybox](http://www1.paybox.com/?lang=en)**
    in console to install this module
    
    
-2. Open `config/app.php` and add
+2. Ouvrir `config/app.php` et ajouter
     
    ```php
    Devpark\PayboxGateway\Providers\PayboxServiceProvider::class,
