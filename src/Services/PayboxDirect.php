@@ -6,13 +6,17 @@ use App;
 use Bnb\PayboxGateway\ActivityCode;
 use Bnb\PayboxGateway\Models\Response;
 use Bnb\PayboxGateway\Models\Wallet;
+use Bnb\PayboxGateway\Requests\PayboxDirect\Authorization;
 use Bnb\PayboxGateway\Requests\PayboxDirect\AuthorizationWithCapture;
+use Bnb\PayboxGateway\Requests\PayboxDirect\Capture;
 use Bnb\PayboxGateway\Requests\PayboxDirect\Refund;
 use Bnb\PayboxGateway\Requests\PayboxDirect\SubscriberAuthorizationWithCapture;
 use Bnb\PayboxGateway\Requests\PayboxDirect\SubscriberCapture;
 use Bnb\PayboxGateway\Requests\PayboxDirect\SubscriberDelete;
 use Bnb\PayboxGateway\Requests\PayboxDirect\SubscriberRegister;
+use Bnb\PayboxGateway\Responses\PayboxDirect\Authorization as AuthorizationWithoutCaptureResponse;
 use Bnb\PayboxGateway\Responses\PayboxDirect\AuthorizationWithCapture as AuthorizationWithCaptureResponse;
+use Bnb\PayboxGateway\Responses\PayboxDirect\Capture as CaptureResponse;
 use Bnb\PayboxGateway\Responses\PayboxDirect\Refund as RefundResponse;
 use Bnb\PayboxGateway\Responses\PayboxDirect\SubscriberAuthorizationWithCapture as SubscriberAuthorizationWithCaptureResponse;
 use Bnb\PayboxGateway\Responses\PayboxDirect\SubscriberCapture as SubscriberCaptureResponse;
@@ -36,6 +40,116 @@ use Throwable;
 
 class PayboxDirect
 {
+
+    /**
+     * @param float  $amount
+     * @param string $cardNumber
+     * @param Carbon $cardExpirationDate
+     * @param string $cardControlNumber
+     * @param string $reference
+     * @param string $activity
+     * @param string $sID3D
+     * @param string $s3DCAVV
+     * @param string $s3DCAVVALGO
+     * @param string $s3DECI
+     * @param string $s3DENROLLED
+     * @param string $s3DERROR
+     * @param string $s3DSIGNVAL
+     * @param string $s3DSTATUS
+     * @param string $s3DXID
+     *
+     * @return Response
+     * @throws InvalidAmountException
+     * @throws InvalidCardControlNumberException
+     * @throws InvalidCardExpirationDateException
+     * @throws InvalidCardNumberException
+     * @throws InvalidReferenceException
+     * @throws OperationFailedException
+     */
+    public static function authorize(
+        $amount,
+        $cardNumber,
+        Carbon $cardExpirationDate,
+        $cardControlNumber,
+        $reference,
+        $activity = ActivityCode::INTERNET_REQUEST,
+        $sID3D = null,
+        $s3DCAVV = null,
+        $s3DCAVVALGO = null,
+        $s3DECI = null,
+        $s3DENROLLED = null,
+        $s3DERROR = null,
+        $s3DSIGNVAL = null,
+        $s3DSTATUS = null,
+        $s3DXID = null
+    ) {
+
+        $amount = self::validateAmount($amount);
+        $cardNumber = self::validateCardNumber($cardNumber);
+        $cardControlNumber = self::validateCardControlNumber($cardControlNumber);
+        $cardExpirationDate = self::validateCardExpirationDate($cardExpirationDate);
+        $reference = self::validateReference($reference);
+
+        $request = App::make(Authorization::class);
+        /** @var AuthorizationWithoutCaptureResponse $response */
+        $response = $request
+            ->setAmount($amount)
+            ->setCardNumber($cardNumber)
+            ->setCardExpirationDate($cardExpirationDate)
+            ->setCardControlNumber($cardControlNumber)
+            ->setActivity($activity)
+            ->setPaymentNumber($reference)
+            ->set3DSecure($sID3D, $s3DCAVV, $s3DCAVVALGO, $s3DECI, $s3DENROLLED, $s3DERROR, $s3DSIGNVAL, $s3DSTATUS,
+                $s3DXID)
+            ->send();
+
+        if ($response->isSuccess()) {
+            return $response->getModel();
+        }
+
+        throw new OperationFailedException($response->getResponseCode(), $response->getComment());
+    }
+
+
+    /**
+     * @param float  $amount
+     * @param string $callNumber
+     * @param string $transactionNumber
+     * @param string $reference
+     *
+     * @return Response
+     * @throws InvalidAmountException
+     * @throws InvalidCallNumberException
+     * @throws InvalidReferenceException
+     * @throws InvalidTransactionNumberException
+     * @throws OperationFailedException
+     */
+    public static function capture(
+        $amount,
+        $callNumber,
+        $transactionNumber,
+        $reference
+    ) {
+        $amount = self::validateAmount($amount);
+        $callNumber = self::validateCallNumber($callNumber);
+        $transactionNumber = self::validateTransactionNumber($transactionNumber);
+        $reference = self::validateReference($reference);
+
+        /** @var CaptureResponse $response */
+        $response = App::make(Capture::class)
+            ->setAmount($amount)
+            ->setPayboxCallNumber($callNumber)
+            ->setPayboxTransactionNumber($transactionNumber)
+            ->setPaymentNumber($reference)
+            ->send();
+
+        if ($response->isSuccess()) {
+            return $response->getModel();
+        }
+
+        throw new OperationFailedException($response->getResponseCode(), $response->getComment());
+    }
+
 
     /**
      * @param float  $amount
@@ -95,9 +209,9 @@ class PayboxDirect
             ->setCardControlNumber($cardControlNumber)
             ->setActivity($activity)
             ->setPaymentNumber($reference)
-            ->set3DSecure($sID3D, $s3DCAVV, $s3DCAVVALGO, $s3DECI, $s3DENROLLED, $s3DERROR, $s3DSIGNVAL, $s3DSTATUS, $s3DXID)
-            ->send()
-        ;
+            ->set3DSecure($sID3D, $s3DCAVV, $s3DCAVVALGO, $s3DECI, $s3DENROLLED, $s3DERROR, $s3DSIGNVAL, $s3DSTATUS,
+                $s3DXID)
+            ->send();
 
         if ($response->isSuccess()) {
             return $response->getModel();
@@ -131,8 +245,7 @@ class PayboxDirect
             ->setAmount($amount)
             ->setPayboxCallNumber($callNumber)
             ->setPayboxTransactionNumber($transactionNumber)
-            ->send()
-        ;
+            ->send();
 
         if ($response->isSuccess()) {
             return $response->getModel();
@@ -196,8 +309,7 @@ class PayboxDirect
                 ->setCardControlNumber($cardControlNumber)
                 ->setActivity($activity)
                 ->setPaymentNumber($reference)
-                ->send()
-            ;
+                ->send();
         } catch (Exception $e) {
             if ( ! empty($wallet)) {
                 try {
@@ -224,8 +336,7 @@ class PayboxDirect
                     ->setPaymentNumber($reference)
                     ->setPayboxTransactionNumber($response->getTransactionNumber())
                     ->setPayboxCallNumber($response->getCallNumber())
-                    ->send()
-                ;
+                    ->send();
 
                 if ($response->isSuccess()) {
                     return $response->getModel();
@@ -240,7 +351,8 @@ class PayboxDirect
                     }
                 }
 
-                throw new OperationFailedException($e->getCode(), sprintf('Failed to capture wallet: %s', $e->getMessage()));
+                throw new OperationFailedException($e->getCode(),
+                    sprintf('Failed to capture wallet: %s', $e->getMessage()));
             }
         }
 
@@ -295,8 +407,7 @@ class PayboxDirect
             ->setCardControlNumber($cardControlNumber)
             ->setActivity($activity)
             ->setPaymentNumber($reference)
-            ->send()
-        ;
+            ->send();
 
         if ($response->isSuccess()) {
             return $response->getModel();
@@ -327,8 +438,7 @@ class PayboxDirect
         /** @var SubscriberDeleteResponse $response */
         $response = $request
             ->setWallet($wallet)
-            ->send()
-        ;
+            ->send();
 
         if ($response->isSuccess()) {
             try {
