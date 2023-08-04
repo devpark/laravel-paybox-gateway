@@ -7,6 +7,7 @@ use Devpark\PayboxGateway\Language;
 use Devpark\PayboxGateway\Services\Amount;
 use Devpark\PayboxGateway\Services\HmacHashGenerator;
 use Devpark\PayboxGateway\Services\ServerSelector;
+use Devpark\PayboxGateway\Utils\XmlUtils;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\Routing\Router;
@@ -82,6 +83,16 @@ abstract class Authorization extends Request
     protected $view;
 
     /**
+     * @var array|null
+     */
+    protected $shoppingCart = null;
+
+    /**
+     * @var array|null
+     */
+    protected $billing = null;
+
+    /**
      * Authorization constructor.
      *
      * @param ServerSelector $serverSelector
@@ -126,7 +137,7 @@ abstract class Authorization extends Request
      */
     protected function getBasicParameters()
     {
-        return [
+        $parameters = [
             'PBX_SITE' => $this->config->get('paybox.site'),
             'PBX_RANG' => $this->config->get('paybox.rank'),
             'PBX_IDENTIFIANT' => $this->config->get('paybox.id'),
@@ -144,6 +155,15 @@ abstract class Authorization extends Request
             'PBX_ATTENTE' => $this->getCustomerUrl('customerPaymentWaitingUrl', 'waiting'),
             'PBX_REPONDRE_A' => $this->getTransactionUrl(),
         ];
+
+        if (!is_null($this->shoppingCart)) {
+            $parameters['PBX_SHOPPINGCART'] = $this->getShoppingCart();
+        }
+        if (!is_null($this->billing)) {
+            $parameters['PBX_BILLING'] = $this->getBilling();
+        }
+
+        return $parameters;
     }
 
     /**
@@ -285,6 +305,72 @@ abstract class Authorization extends Request
     }
 
     /**
+     * Set shopping cart variables
+     *
+     * @param string $totalQuantity
+     *
+     * @return $this
+     */
+    public function setShoppingCart($totalQuantity = 1)
+    {
+        $this->shoppingCart = [
+            'total' => [
+                'totalQuantity' => $totalQuantity
+            ]
+        ];
+
+        return $this;
+    }
+
+    /**
+     * Return PBX_SHOPPINGCART
+     *
+     * @return string
+     */
+    public function getShoppingCart()
+    {
+        return XmlUtils::arrayToXmlString($this->shoppingCart, 'shoppingcart');
+    }
+
+    /**
+     * Set billing variables
+     *
+     * @param string $firstname
+     * @param string $lastname
+     * @param string $address
+     * @param string $zipcode
+     * @param string $city
+     * @param int $countryCode
+     *
+     * @return $this
+     */
+    public function setBilling($firstname, $lastname, $address, $zipcode, $city, $countryCode = 250)
+    {
+        $this->billing = [
+            'Address' => [
+                'FirstName' => $firstname,
+                'LastName' => $lastname,
+                'Address1' => $address,
+                'ZipCode' => $zipcode,
+                'City' => $city,
+                'CountryCode' => $countryCode, // ISO_3166-1
+            ]
+        ];
+
+        return $this;
+    }
+
+    /**
+     * Return PBX_BILLING
+     *
+     * @return string
+     */
+    public function getBilling()
+    {
+        return XmlUtils::arrayToXmlString($this->billing, 'Billing');
+    }
+
+    /**
      * Get customer url.
      *
      * @param string $variableName
@@ -295,7 +381,8 @@ abstract class Authorization extends Request
     protected function getCustomerUrl($variableName, $configKey)
     {
         return $this->$variableName ?: $this->urlGenerator->route(
-            $this->config->get('paybox.customer_return_routes_names.' . $configKey));
+            $this->config->get('paybox.customer_return_routes_names.' . $configKey)
+        );
     }
 
     /**
@@ -306,7 +393,8 @@ abstract class Authorization extends Request
     protected function getTransactionUrl()
     {
         return $this->transactionVerifyUrl ?: $this->urlGenerator->route(
-            $this->config->get('paybox.transaction_verify_route_name'));
+            $this->config->get('paybox.transaction_verify_route_name')
+        );
     }
 
     /**
@@ -321,7 +409,9 @@ abstract class Authorization extends Request
     {
         $parameters = $parameters ?: $this->getParameters();
 
-        return $this->view->make($viewName,
-            ['parameters' => $parameters, 'url' => $this->getUrl()]);
+        return $this->view->make(
+            $viewName,
+            ['parameters' => $parameters, 'url' => $this->getUrl()]
+        );
     }
 }
